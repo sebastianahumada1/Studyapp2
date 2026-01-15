@@ -125,7 +125,14 @@ export async function POST(request: Request): Promise<Response> {
               subtopic_name: subtopic?.name || undefined,
             };
           })
-          .filter((e: any) => e !== null);
+          .filter((e: any): e is {
+            question_id: string;
+            question_text: string;
+            user_answer: string;
+            correct_answer: string;
+            subtopic_id?: string;
+            subtopic_name?: string;
+          } => e !== null);
 
         if (errors.length > 0) {
           errorContext = {
