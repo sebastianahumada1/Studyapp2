@@ -89,50 +89,50 @@ export async function POST(request: Request): Promise<Response> {
         .in('id', selectedErrorIds);
 
       if (!errorsError && errorsData) {
-        const errors = errorsData
-          .map((answer: any) => {
-            const question = answer.question;
-            if (!question) return null;
+        const errors: Array<{
+          question_id: string;
+          question_text: string;
+          user_answer: string;
+          correct_answer: string;
+          subtopic_id?: string;
+          subtopic_name?: string;
+        }> = [];
 
-            // Parse options
-            let options: Array<{ text: string }> = [];
-            if (question.options) {
-              try {
-                const parsedOptions =
-                  typeof question.options === 'string'
-                    ? JSON.parse(question.options)
-                    : question.options;
-                if (Array.isArray(parsedOptions)) {
-                  options = parsedOptions;
-                }
-              } catch {
-                // Ignore parse errors
+        for (const answer of errorsData) {
+          const question = answer.question;
+          if (!question) continue;
+
+          // Parse options
+          let options: Array<{ text: string }> = [];
+          if (question.options) {
+            try {
+              const parsedOptions =
+                typeof question.options === 'string'
+                  ? JSON.parse(question.options)
+                  : question.options;
+              if (Array.isArray(parsedOptions)) {
+                options = parsedOptions;
               }
+            } catch {
+              // Ignore parse errors
             }
+          }
 
-            const selectedAnswer = options[answer.selected_answer_index]?.text || '';
-            const correctAnswer = options[question.correct_answer_index]?.text || '';
-            const subtopic = Array.isArray(question.subtopic)
-              ? question.subtopic[0]
-              : question.subtopic;
+          const selectedAnswer = options[answer.selected_answer_index]?.text || '';
+          const correctAnswer = options[question.correct_answer_index]?.text || '';
+          const subtopic = Array.isArray(question.subtopic)
+            ? question.subtopic[0]
+            : question.subtopic;
 
-            return {
-              question_id: question.id,
-              question_text: question.question_text,
-              user_answer: selectedAnswer,
-              correct_answer: correctAnswer,
-              subtopic_id: question.subtopic_id || undefined,
-              subtopic_name: subtopic?.name || undefined,
-            };
-          })
-          .filter((e: any): e is {
-            question_id: string;
-            question_text: string;
-            user_answer: string;
-            correct_answer: string;
-            subtopic_id?: string;
-            subtopic_name?: string;
-          } => e !== null);
+          errors.push({
+            question_id: question.id,
+            question_text: question.question_text,
+            user_answer: selectedAnswer,
+            correct_answer: correctAnswer,
+            subtopic_id: question.subtopic_id || undefined,
+            subtopic_name: subtopic?.name || undefined,
+          });
+        }
 
         if (errors.length > 0) {
           errorContext = {
