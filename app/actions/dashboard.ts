@@ -116,10 +116,16 @@ export async function getMainRoute(): Promise<
     // Find first incomplete topic, or last completed topic if all are completed
     const incompleteTopic = topics.find((t) => !t.is_completed);
     const completedTopics = topics.filter((t) => t.is_completed);
-    currentTopic = incompleteTopic || (completedTopics.length > 0 ? completedTopics[completedTopics.length - 1] : topics[0]);
+    const selectedTopic = incompleteTopic || (completedTopics.length > 0 ? completedTopics[completedTopics.length - 1] : topics[0]);
+    
+    if (selectedTopic) {
+      currentTopic = {
+        id: selectedTopic.id,
+        name: selectedTopic.name,
+        description: selectedTopic.description,
+      };
 
-    if (currentTopic) {
-      const topicSubtopics = subtopics?.filter((s) => s.topic_id === currentTopic.id) || [];
+      const topicSubtopics = subtopics?.filter((s) => s.topic_id === selectedTopic.id) || [];
       if (topicSubtopics.length > 0) {
         // Find first incomplete subtopic, or last completed subtopic
         const incompleteSubtopic = topicSubtopics.find((s) => !s.is_completed);
