@@ -109,8 +109,8 @@ export async function getMainRoute(): Promise<
   const progress = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
 
   // Get current topic/subtopic (first incomplete or last completed)
-  let currentTopic = null;
-  let currentSubtopic = null;
+  let currentTopic: { id: string; name: string; description: string | null } | null = null;
+  let currentSubtopic: { id: string; name: string; description: string | null } | null = null;
 
   if (topics && topics.length > 0) {
     // Find first incomplete topic, or last completed topic if all are completed
