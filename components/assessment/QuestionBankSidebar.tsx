@@ -78,17 +78,17 @@ function RouteNode({
   const filteredTopics = useMemo(() => {
     if (!searchQuery) return Array.from(routeData.topics.values());
     const query = searchQuery.toLowerCase();
-    return Array.from(routeData.topics.values()).filter(topic => 
+    return Array.from(routeData.topics.values() as IterableIterator<TopicData>).filter((topic: TopicData) => 
       topic.topicName.toLowerCase().includes(query) ||
-      Array.from(topic.subtopics.values()).some(subtopic =>
+      Array.from(topic.subtopics.values() as IterableIterator<SubtopicData>).some((subtopic: SubtopicData) =>
         subtopic.subtopicName.toLowerCase().includes(query) ||
-        Array.from(subtopic.subsubtopics.values()).some(subsubtopic =>
+        Array.from(subtopic.subsubtopics.values() as IterableIterator<SubsubtopicData>).some((subsubtopic: SubsubtopicData) =>
           subsubtopic.subsubtopicName.toLowerCase().includes(query) ||
-          subsubtopic.questions.some(q => q.question_text.toLowerCase().includes(query))
+          subsubtopic.questions.some((q: QuestionWithHierarchy) => q.question_text.toLowerCase().includes(query))
         ) ||
-        subtopic.questions.some(q => q.question_text.toLowerCase().includes(query))
+        subtopic.questions.some((q: QuestionWithHierarchy) => q.question_text.toLowerCase().includes(query))
       ) ||
-      topic.questions.some(q => q.question_text.toLowerCase().includes(query))
+      topic.questions.some((q: QuestionWithHierarchy) => q.question_text.toLowerCase().includes(query))
     );
   }, [routeData.topics, searchQuery]);
 
@@ -194,15 +194,15 @@ function TopicNode({
     }, 0);
 
   const filteredSubtopics = useMemo(() => {
-    if (!searchQuery) return Array.from(topic.subtopics.values());
+    if (!searchQuery) return Array.from(topic.subtopics.values() as IterableIterator<SubtopicData>);
     const query = searchQuery.toLowerCase();
-    return Array.from(topic.subtopics.values()).filter(subtopic =>
+    return Array.from(topic.subtopics.values() as IterableIterator<SubtopicData>).filter((subtopic: SubtopicData) =>
       subtopic.subtopicName.toLowerCase().includes(query) ||
       Array.from(subtopic.subsubtopics.values() as IterableIterator<SubsubtopicData>).some((subsubtopic) =>
         subsubtopic.subsubtopicName.toLowerCase().includes(query) ||
-        subsubtopic.questions.some(q => q.question_text.toLowerCase().includes(query))
+        subsubtopic.questions.some((q: QuestionWithHierarchy) => q.question_text.toLowerCase().includes(query))
       ) ||
-      subtopic.questions.some(q => q.question_text.toLowerCase().includes(query))
+      subtopic.questions.some((q: QuestionWithHierarchy) => q.question_text.toLowerCase().includes(query))
     );
   }, [topic.subtopics, searchQuery]);
 
@@ -334,11 +334,11 @@ function SubtopicNode({
     }, 0);
 
   const filteredSubsubtopics = useMemo(() => {
-    if (!searchQuery) return Array.from(subtopic.subsubtopics.values());
+    if (!searchQuery) return Array.from(subtopic.subsubtopics.values() as IterableIterator<SubsubtopicData>);
     const query = searchQuery.toLowerCase();
-    return Array.from(subtopic.subsubtopics.values() as IterableIterator<SubsubtopicData>).filter((subsubtopic) =>
+    return Array.from(subtopic.subsubtopics.values() as IterableIterator<SubsubtopicData>).filter((subsubtopic: SubsubtopicData) =>
       subsubtopic.subsubtopicName.toLowerCase().includes(query) ||
-      subsubtopic.questions.some(q => q.question_text.toLowerCase().includes(query))
+      subsubtopic.questions.some((q: QuestionWithHierarchy) => q.question_text.toLowerCase().includes(query))
     );
   }, [subtopic.subsubtopics, searchQuery]);
 
@@ -608,19 +608,19 @@ export function QuestionBankSidebar({
     const query = searchQuery.toLowerCase();
     return Array.from(groupedHierarchy.values()).filter(route =>
       route.routeTitle.toLowerCase().includes(query) ||
-      Array.from(route.topics.values()).some(topic =>
+      Array.from(route.topics.values() as IterableIterator<TopicData>).some((topic: TopicData) =>
         topic.topicName.toLowerCase().includes(query) ||
-        Array.from(topic.subtopics.values()).some(subtopic =>
+        Array.from(topic.subtopics.values() as IterableIterator<SubtopicData>).some((subtopic: SubtopicData) =>
           subtopic.subtopicName.toLowerCase().includes(query) ||
-          Array.from(subtopic.subsubtopics.values()).some(subsubtopic =>
+          Array.from(subtopic.subsubtopics.values() as IterableIterator<SubsubtopicData>).some((subsubtopic: SubsubtopicData) =>
             subsubtopic.subsubtopicName.toLowerCase().includes(query) ||
-            subsubtopic.questions.some(q => q.question_text.toLowerCase().includes(query))
+            subsubtopic.questions.some((q: QuestionWithHierarchy) => q.question_text.toLowerCase().includes(query))
           ) ||
-          subtopic.questions.some(q => q.question_text.toLowerCase().includes(query))
+          subtopic.questions.some((q: QuestionWithHierarchy) => q.question_text.toLowerCase().includes(query))
         ) ||
-        topic.questions.some(q => q.question_text.toLowerCase().includes(query))
+        topic.questions.some((q: QuestionWithHierarchy) => q.question_text.toLowerCase().includes(query))
       ) ||
-      route.questions.some(q => q.question_text.toLowerCase().includes(query))
+      route.questions.some((q: QuestionWithHierarchy) => q.question_text.toLowerCase().includes(query))
     );
   }, [groupedHierarchy, searchQuery]);
 
