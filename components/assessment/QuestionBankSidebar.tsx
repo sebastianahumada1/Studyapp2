@@ -65,18 +65,18 @@ function RouteNode({
   const [isExpanded, setIsExpanded] = useState(false);
   const isSelected = selectedItems.some(item => item.type === 'route' && item.id === routeData.routeId);
   const questionCount = routeData.questions.length + 
-    Array.from(routeData.topics.values()).reduce((acc, topic) => {
+    Array.from(routeData.topics.values() as IterableIterator<TopicData>).reduce((acc: number, topic: TopicData) => {
       return acc + topic.questions.length + 
-        Array.from(topic.subtopics.values()).reduce((subAcc, subtopic) => {
+        Array.from(topic.subtopics.values() as IterableIterator<SubtopicData>).reduce((subAcc: number, subtopic: SubtopicData) => {
           return subAcc + subtopic.questions.length +
-            Array.from(subtopic.subsubtopics.values() as IterableIterator<SubsubtopicData>).reduce((ssAcc, subsubtopic) => {
+            Array.from(subtopic.subsubtopics.values() as IterableIterator<SubsubtopicData>).reduce((ssAcc: number, subsubtopic: SubsubtopicData) => {
               return ssAcc + subsubtopic.questions.length;
             }, 0);
         }, 0);
     }, 0);
 
   const filteredTopics = useMemo(() => {
-    if (!searchQuery) return Array.from(routeData.topics.values());
+    if (!searchQuery) return Array.from(routeData.topics.values() as IterableIterator<TopicData>);
     const query = searchQuery.toLowerCase();
     return Array.from(routeData.topics.values() as IterableIterator<TopicData>).filter((topic: TopicData) => 
       topic.topicName.toLowerCase().includes(query) ||
@@ -186,9 +186,9 @@ function TopicNode({
   const hasSubtopics = topic.subtopics.size > 0;
   const isSelected = selectedItems.some(item => item.type === 'topic' && item.id === topic.topicId);
   const questionCount = topic.questions.length + 
-    Array.from(topic.subtopics.values()).reduce((acc, subtopic) => {
+    Array.from(topic.subtopics.values() as IterableIterator<SubtopicData>).reduce((acc: number, subtopic: SubtopicData) => {
       return acc + subtopic.questions.length +
-        Array.from(subtopic.subsubtopics.values() as IterableIterator<SubsubtopicData>).reduce((ssAcc, subsubtopic) => {
+        Array.from(subtopic.subsubtopics.values() as IterableIterator<SubsubtopicData>).reduce((ssAcc: number, subsubtopic: SubsubtopicData) => {
           return ssAcc + subsubtopic.questions.length;
         }, 0);
     }, 0);
@@ -604,9 +604,9 @@ export function QuestionBankSidebar({
   }, [questions]);
 
   const filteredRoutes = useMemo(() => {
-    if (!searchQuery) return Array.from(groupedHierarchy.values());
+    if (!searchQuery) return Array.from(groupedHierarchy.values() as IterableIterator<GroupedHierarchy>);
     const query = searchQuery.toLowerCase();
-    return Array.from(groupedHierarchy.values()).filter(route =>
+    return Array.from(groupedHierarchy.values() as IterableIterator<GroupedHierarchy>).filter((route: GroupedHierarchy) =>
       route.routeTitle.toLowerCase().includes(query) ||
       Array.from(route.topics.values() as IterableIterator<TopicData>).some((topic: TopicData) =>
         topic.topicName.toLowerCase().includes(query) ||
