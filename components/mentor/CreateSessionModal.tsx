@@ -505,9 +505,10 @@ export function CreateSessionModal({ isOpen, onClose, onSessionCreated }: Create
                               border: 'border-cyan-500/30',
                             },
                           };
-                          const validErrorType = error.error_type && (error.error_type === 'concepto' || error.error_type === 'analisis' || error.error_type === 'atencion') 
-                            ? error.error_type 
-                            : null;
+                          const validErrorType: 'concepto' | 'analisis' | 'atencion' | null = 
+                            error.error_type === 'concepto' ? 'concepto' :
+                            error.error_type === 'analisis' ? 'analisis' :
+                            error.error_type === 'atencion' ? 'atencion' : null;
                           const colors = validErrorType
                             ? errorTypeColors[validErrorType]
                             : {

@@ -54,9 +54,10 @@ const errorTypeLabels = {
 };
 
 export function DiagnosticCard({ error, onView, onEdit }: DiagnosticCardProps) {
-  const validErrorType = error.error_type && (error.error_type === 'concepto' || error.error_type === 'analisis' || error.error_type === 'atencion') 
-    ? error.error_type 
-    : null;
+  const validErrorType: 'concepto' | 'analisis' | 'atencion' | null = 
+    error.error_type === 'concepto' ? 'concepto' :
+    error.error_type === 'analisis' ? 'analisis' :
+    error.error_type === 'atencion' ? 'atencion' : null;
   const colors = validErrorType ? errorTypeColors[validErrorType] : {
     bg: 'bg-slate-500/10',
     text: 'text-slate-400',
