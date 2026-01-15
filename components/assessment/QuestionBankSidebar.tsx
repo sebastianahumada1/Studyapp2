@@ -22,25 +22,31 @@ interface QuestionBankSidebarProps {
   onRemoveItem: (index: number) => void;
 }
 
-// Group questions by hierarchy
+// Group questions by hierarchy - extracted types for better type inference
+interface SubsubtopicData {
+  subsubtopicId: string;
+  subsubtopicName: string;
+  questions: QuestionWithHierarchy[];
+}
+
+interface SubtopicData {
+  subtopicId: string;
+  subtopicName: string;
+  subsubtopics: Map<string, SubsubtopicData>;
+  questions: QuestionWithHierarchy[];
+}
+
+interface TopicData {
+  topicId: string;
+  topicName: string;
+  subtopics: Map<string, SubtopicData>;
+  questions: QuestionWithHierarchy[];
+}
+
 interface GroupedHierarchy {
   routeId: string;
   routeTitle: string;
-  topics: Map<string, {
-    topicId: string;
-    topicName: string;
-    subtopics: Map<string, {
-      subtopicId: string;
-      subtopicName: string;
-      subsubtopics: Map<string, {
-        subsubtopicId: string;
-        subsubtopicName: string;
-        questions: QuestionWithHierarchy[];
-      }>;
-      questions: QuestionWithHierarchy[];
-    }>;
-    questions: QuestionWithHierarchy[];
-  }>;
+  topics: Map<string, TopicData>;
   questions: QuestionWithHierarchy[];
 }
 
@@ -63,7 +69,7 @@ function RouteNode({
       return acc + topic.questions.length + 
         Array.from(topic.subtopics.values()).reduce((subAcc, subtopic) => {
           return subAcc + subtopic.questions.length +
-            Array.from(subtopic.subsubtopics.values()).reduce((ssAcc, subsubtopic: { subsubtopicId: string; subsubtopicName: string; questions: QuestionWithHierarchy[] }) => {
+            Array.from(subtopic.subsubtopics.values() as IterableIterator<SubsubtopicData>).reduce((ssAcc, subsubtopic) => {
               return ssAcc + subsubtopic.questions.length;
             }, 0);
         }, 0);
@@ -182,7 +188,7 @@ function TopicNode({
   const questionCount = topic.questions.length + 
     Array.from(topic.subtopics.values()).reduce((acc, subtopic) => {
       return acc + subtopic.questions.length +
-        Array.from(subtopic.subsubtopics.values()).reduce((ssAcc, subsubtopic: { subsubtopicId: string; subsubtopicName: string; questions: QuestionWithHierarchy[] }) => {
+        Array.from(subtopic.subsubtopics.values() as IterableIterator<SubsubtopicData>).reduce((ssAcc, subsubtopic) => {
           return ssAcc + subsubtopic.questions.length;
         }, 0);
     }, 0);
@@ -192,7 +198,7 @@ function TopicNode({
     const query = searchQuery.toLowerCase();
     return Array.from(topic.subtopics.values()).filter(subtopic =>
       subtopic.subtopicName.toLowerCase().includes(query) ||
-      Array.from(subtopic.subsubtopics.values()).some((subsubtopic: { subsubtopicId: string; subsubtopicName: string; questions: QuestionWithHierarchy[] }) =>
+      Array.from(subtopic.subsubtopics.values() as IterableIterator<SubsubtopicData>).some((subsubtopic) =>
         subsubtopic.subsubtopicName.toLowerCase().includes(query) ||
         subsubtopic.questions.some(q => q.question_text.toLowerCase().includes(query))
       ) ||
@@ -323,14 +329,14 @@ function SubtopicNode({
   const [isExpanded, setIsExpanded] = useState(false);
   const isSelected = selectedItems.some(item => item.type === 'subtopic' && item.id === subtopic.subtopicId);
   const questionCount = subtopic.questions.length +
-    Array.from(subtopic.subsubtopics.values()).reduce((acc, subsubtopic: { subsubtopicId: string; subsubtopicName: string; questions: QuestionWithHierarchy[] }) => {
+    Array.from(subtopic.subsubtopics.values() as IterableIterator<SubsubtopicData>).reduce((acc, subsubtopic) => {
       return acc + subsubtopic.questions.length;
     }, 0);
 
   const filteredSubsubtopics = useMemo(() => {
     if (!searchQuery) return Array.from(subtopic.subsubtopics.values());
     const query = searchQuery.toLowerCase();
-    return Array.from(subtopic.subsubtopics.values()).filter((subsubtopic: { subsubtopicId: string; subsubtopicName: string; questions: QuestionWithHierarchy[] }) =>
+    return Array.from(subtopic.subsubtopics.values() as IterableIterator<SubsubtopicData>).filter((subsubtopic) =>
       subsubtopic.subsubtopicName.toLowerCase().includes(query) ||
       subsubtopic.questions.some(q => q.question_text.toLowerCase().includes(query))
     );
