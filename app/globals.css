@@ -146,6 +146,23 @@
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(13, 242, 242, 0.2);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(13, 242, 242, 0.4);
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -473,3 +490,13 @@
   transform: rotate(90deg);
 }
 
+.glass-card {
+  background: rgba(18, 42, 42, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(13, 242, 242, 0.1);
+}
+
+.cyber-border {
+  box-shadow: 0 0 15px rgba(13, 242, 242, 0.1), inset 0 0 10px rgba(13, 242, 242, 0.05);
+}

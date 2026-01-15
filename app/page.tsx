@@ -1,9 +1,21 @@
 import { Sidebar } from '@/components/Sidebar';
 import { requireAuth } from '@/lib/auth';
 import Link from 'next/link';
+import { getMainRoute, getPerformanceMetrics, getFocusAreas } from '@/app/actions/dashboard';
 
 export default async function Home() {
   const user = await requireAuth();
+  
+  // Fetch dashboard data
+  const [mainRouteResult, performanceResult, focusAreasResult] = await Promise.all([
+    getMainRoute(),
+    getPerformanceMetrics('weekly'),
+    getFocusAreas(),
+  ]);
+
+  const mainRoute = mainRouteResult.success ? mainRouteResult.data : null;
+  const performance = performanceResult.success ? performanceResult.data : null;
+  const focusAreas = focusAreasResult.success ? focusAreasResult.data : [];
 
   return (
     <div className="flex h-screen w-full overflow-hidden">
@@ -58,71 +70,104 @@ export default async function Home() {
           {/* Main Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 auto-rows-min">
             {/* Ruta Principal Card */}
-            <div className="group relative md:col-span-2 lg:col-span-8 bg-card-dark rounded-2xl border border-white/5 hover:border-primary/40 transition-all duration-300 overflow-hidden flex flex-col shadow-lg">
-              <div className="absolute top-3 right-3 text-white/20 widget-handle">
-                <span className="material-symbols-outlined text-lg">
-                  drag_indicator
-                </span>
-              </div>
-              <div className="flex flex-col md:flex-row h-full">
-                <div
-                  className="w-full md:w-2/5 h-48 md:h-auto bg-cover bg-center relative"
-                  style={{
-                    backgroundImage:
-                      'url("https://lh3.googleusercontent.com/aida-public/AB6AXuA7ZlH1kT0yHwFcr4VMP6re1gZL041Lyv4hcdD4xt_QnejrIWAdKc4HIu2npmqqCgv9nph4z6iFgG0LuyiY2_2tcdjMwpp3nKQcI3xSU4w2iYGhaWwB6UdsBnibGoT2LLxyJeuO1mb-r5P89riuFsnt6nfVNf4ASNRGS-1zDm7ikyQfVZlwtMpM9Sg7vVb6AvZRlEySgRnOe2VGDzGAsp8AiZcgWzeeaRjyPn2s55R8vnyEv86m6wkiWVhcBkcPgVMvaCR5gswbXa3q")',
-                  }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-card-dark via-card-dark/80 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 z-10">
-                    <span className="bg-primary/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">
-                      En Curso
-                    </span>
-                  </div>
+            {mainRoute ? (
+              <Link
+                href={`/hub/${mainRoute.id}`}
+                className="group relative md:col-span-2 lg:col-span-8 bg-card-dark rounded-2xl border border-white/5 hover:border-primary/40 transition-all duration-300 overflow-hidden flex flex-col shadow-lg"
+              >
+                <div className="absolute top-3 right-3 text-white/20 widget-handle">
+                  <span className="material-symbols-outlined text-lg">
+                    drag_indicator
+                  </span>
                 </div>
-                <div className="p-6 md:p-8 flex flex-col justify-center flex-1 relative">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-text-secondary text-sm font-medium uppercase tracking-wider">
-                      Ruta Principal
-                    </h3>
-                    <span className="text-white text-xs font-mono bg-white/5 px-2 py-1 rounded">
-                      MAT-204
-                    </span>
+                <div className="flex flex-col md:flex-row h-full">
+                  <div
+                    className="w-full md:w-2/5 h-48 md:h-auto bg-cover bg-center relative"
+                    style={{
+                      backgroundImage:
+                        'url("https://lh3.googleusercontent.com/aida-public/AB6AXuA7ZlH1kT0yHwFcr4VMP6re1gZL041Lyv4hcdD4xt_QnejrIWAdKc4HIu2npmqqCgv9nph4z6iFgG0LuyiY2_2tcdjMwpp3nKQcI3xSU4w2iYGhaWwB6UdsBnibGoT2LLxyJeuO1mb-r5P89riuFsnt6nfVNf4ASNRGS-1zDm7ikyQfVZlwtMpM9Sg7vVb6AvZRlEySgRnOe2VGDzGAsp8AiZcgWzeeaRjyPn2s55R8vnyEv86m6wkiWVhcBkcPgVMvaCR5gswbXa3q")',
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-card-dark via-card-dark/80 to-transparent"></div>
+                    <div className="absolute bottom-4 left-4 z-10">
+                      <span className="bg-primary/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">
+                        En Curso
+                      </span>
+                    </div>
                   </div>
-                  <h4 className="text-2xl font-bold text-white mb-2">
-                    Matemáticas Avanzadas:{' '}
-                    <span className="text-indigo-400">Cálculo Integral</span>
-                  </h4>
-                  <p className="text-gray-400 text-sm mb-6 line-clamp-2">
-                    Continuar con las técnicas de integración por partes y
-                    sustitución trigonométrica.
-                  </p>
-                  <div className="flex items-center gap-4 mt-auto">
-                    <div className="flex-1 flex flex-col gap-1">
-                      <div className="flex justify-between text-xs mb-1">
-                        <span className="text-indigo-300">
-                          Progreso del módulo
-                        </span>
-                        <span className="text-white">45%</span>
-                      </div>
-                      <div className="w-full bg-[#0f0c1d] rounded-full h-2 overflow-hidden border border-white/5">
-                        <div
-                          className="bg-gradient-to-r from-cyan-500 to-indigo-600 h-full rounded-full relative"
-                          style={{ width: '45%' }}
-                        >
-                          <div className="absolute top-0 right-0 h-full w-full bg-gradient-to-b from-white/20 to-transparent"></div>
+                  <div className="p-6 md:p-8 flex flex-col justify-center flex-1 relative">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="text-text-secondary text-sm font-medium uppercase tracking-wider">
+                        Ruta Principal
+                      </h3>
+                      {/* Code field removed as it doesn't exist in schema */}
+                    </div>
+                    <h4 className="text-2xl font-bold text-white mb-2">
+                      {mainRoute.title.split(':')[0]}
+                      {mainRoute.title.includes(':') && (
+                        <>
+                          :{' '}
+                          <span className="text-indigo-400">
+                            {mainRoute.title.split(':').slice(1).join(':')}
+                          </span>
+                        </>
+                      )}
+                    </h4>
+                    <p className="text-gray-400 text-sm mb-6 line-clamp-2">
+                      {mainRoute.current_subtopic
+                        ? `Continuar con ${mainRoute.current_subtopic.name}`
+                        : mainRoute.current_topic
+                          ? `Continuar con ${mainRoute.current_topic.name}`
+                          : mainRoute.description || 'Continúa tu aprendizaje'}
+                    </p>
+                    <div className="flex items-center gap-4 mt-auto">
+                      <div className="flex-1 flex flex-col gap-1">
+                        <div className="flex justify-between text-xs mb-1">
+                          <span className="text-indigo-300">
+                            Progreso del módulo
+                          </span>
+                          <span className="text-white">{mainRoute.progress}%</span>
+                        </div>
+                        <div className="w-full bg-[#0f0c1d] rounded-full h-2 overflow-hidden border border-white/5">
+                          <div
+                            className="bg-gradient-to-r from-cyan-500 to-indigo-600 h-full rounded-full relative"
+                            style={{ width: `${mainRoute.progress}%` }}
+                          >
+                            <div className="absolute top-0 right-0 h-full w-full bg-gradient-to-b from-white/20 to-transparent"></div>
+                          </div>
                         </div>
                       </div>
+                      <button className="shrink-0 flex items-center gap-2 bg-white text-black hover:bg-cyan-50 px-5 py-2.5 rounded-lg font-bold text-sm transition-colors shadow-[0_0_20px_rgba(255,255,255,0.15)]">
+                        Continuar
+                        <span className="material-symbols-outlined text-lg">
+                          play_arrow
+                        </span>
+                      </button>
                     </div>
-                    <button className="shrink-0 flex items-center gap-2 bg-white text-black hover:bg-cyan-50 px-5 py-2.5 rounded-lg font-bold text-sm transition-colors shadow-[0_0_20px_rgba(255,255,255,0.15)]">
-                      Continuar
-                      <span className="material-symbols-outlined text-lg">
-                        play_arrow
-                      </span>
-                    </button>
                   </div>
                 </div>
-              </div>
-            </div>
+              </Link>
+            ) : (
+              <Link
+                href="/hub"
+                className="group relative md:col-span-2 lg:col-span-8 bg-card-dark rounded-2xl border border-white/5 hover:border-primary/40 transition-all duration-300 overflow-hidden flex flex-col shadow-lg items-center justify-center p-12"
+              >
+                <div className="text-center">
+                  <span className="material-symbols-outlined text-6xl text-text-muted mb-4">
+                    school
+                  </span>
+                  <h3 className="text-white text-xl font-bold mb-2">
+                    No tienes rutas de estudio
+                  </h3>
+                  <p className="text-text-muted mb-6">
+                    Crea tu primera ruta de estudio para comenzar
+                  </p>
+                  <button className="bg-primary text-background-dark px-6 py-3 rounded-lg font-bold hover:shadow-[0_0_20px_rgba(13,242,242,0.4)] transition-all">
+                    Crear Ruta
+                  </button>
+                </div>
+              </Link>
+            )}
 
             {/* Rendimiento Card */}
             <div className="group relative md:col-span-2 lg:col-span-4 bg-card-dark rounded-2xl border border-white/5 hover:border-primary/40 transition-all duration-300 p-6 flex flex-col justify-between shadow-lg bg-gradient-violet">
@@ -144,8 +189,21 @@ export default async function Home() {
                     Precisión
                   </p>
                   <div className="flex items-end gap-1">
-                    <span className="text-2xl font-bold text-white">78%</span>
-                    <span className="text-green-400 text-xs mb-1">↑ 2%</span>
+                    <span className="text-2xl font-bold text-white">
+                      {performance?.precision || 0}%
+                    </span>
+                    {performance && performance.precisionChange !== 0 && (
+                      <span
+                        className={`text-xs mb-1 ${
+                          performance.precisionChange > 0
+                            ? 'text-green-400'
+                            : 'text-red-400'
+                        }`}
+                      >
+                        {performance.precisionChange > 0 ? '↑' : '↓'}{' '}
+                        {Math.abs(performance.precisionChange)}%
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="bg-[#0f0c1d]/50 p-3 rounded-xl border border-white/5">
@@ -153,7 +211,9 @@ export default async function Home() {
                     Tiempo
                   </p>
                   <div className="flex items-end gap-1">
-                    <span className="text-2xl font-bold text-white">4.2h</span>
+                    <span className="text-2xl font-bold text-white">
+                      {performance?.timeToday || 0}h
+                    </span>
                     <span className="text-text-secondary text-xs mb-1">
                       hoy
                     </span>
@@ -161,9 +221,13 @@ export default async function Home() {
                 </div>
               </div>
               <div className="h-24 w-full flex items-end gap-2 justify-between px-1">
-                {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((day, index) => {
-                  const heights = [40, 60, 30, 75, 90, 20, 10];
-                  const isToday = index === 4;
+                {performance?.weeklyData.map((dayData, index) => {
+                  const maxValue = Math.max(
+                    ...(performance.weeklyData.map((d) => d.value) || [1]),
+                    1
+                  );
+                  const height = Math.max((dayData.value / maxValue) * 100, 5);
+                  const isToday = index === performance.weeklyData.length - 1;
                   return (
                     <div
                       key={`day-${index}`}
@@ -172,14 +236,29 @@ export default async function Home() {
                           ? 'bg-accent/20 hover:bg-accent/40'
                           : 'bg-indigo-500/10'
                       }`}
-                      style={{ height: `${heights[index]}%` }}
+                      style={{ height: `${height}%` }}
+                      title={`${dayData.day}: ${dayData.value.toFixed(1)}h`}
                     >
-                      <div className="opacity-0 group-hover/bar:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-2 py-1 rounded">
-                        {day}
+                      <div className="opacity-0 group-hover/bar:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-2 py-1 rounded whitespace-nowrap z-10">
+                        {dayData.day}: {dayData.value.toFixed(1)}h
                       </div>
                     </div>
                   );
-                })}
+                }) || (
+                  <>
+                    {['D', 'L', 'M', 'M', 'J', 'V', 'S'].map((day, index) => (
+                      <div
+                        key={`day-${index}`}
+                        className="w-full rounded-t-sm bg-indigo-500/10"
+                        style={{ height: '10%' }}
+                      >
+                        <div className="opacity-0 group-hover/bar:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-2 py-1 rounded">
+                          {day}
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                )}
               </div>
             </div>
 
@@ -226,7 +305,10 @@ export default async function Home() {
                     Banco de preguntas
                   </p>
                 </div>
-                <div className="group relative bg-gradient-to-br from-[#1a162e] to-indigo-900/20 p-4 rounded-xl border border-indigo-500/30 hover:border-accent transition-all cursor-pointer hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(99,102,241,0.2)]">
+                <Link
+                  href="/mentor"
+                  className="group relative bg-gradient-to-br from-[#1a162e] to-indigo-900/20 p-4 rounded-xl border border-indigo-500/30 hover:border-accent transition-all cursor-pointer hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(99,102,241,0.2)] block"
+                >
                   <div className="absolute top-2 right-2 text-white/10 widget-handle">
                     <span className="material-symbols-outlined text-sm">
                       drag_indicator
@@ -243,7 +325,7 @@ export default async function Home() {
                   <p className="text-xs text-indigo-200/70 mt-1">
                     Asistencia 24/7
                   </p>
-                </div>
+                </Link>
               </div>
             </div>
 
@@ -266,55 +348,69 @@ export default async function Home() {
                   </h3>
                 </div>
                 <div className="space-y-4 mb-6">
-                  <div className="flex items-center justify-between group/item cursor-pointer">
-                    <div className="flex items-center gap-3">
-                      <div className="h-10 w-1 bg-red-500 rounded-full shadow-[0_0_8px_rgba(239,68,68,0.5)]"></div>
-                      <div>
-                        <p className="text-white font-medium text-sm group-hover/item:text-red-400 transition-colors">
-                          Factorización
-                        </p>
-                        <p className="text-xs text-text-secondary">Álgebra</p>
-                      </div>
+                  {focusAreas.length > 0 ? (
+                    focusAreas.map((area, index) => {
+                      // Determine color based on precision
+                      let barColor = 'bg-red-500';
+                      let barShadow = 'shadow-[0_0_8px_rgba(239,68,68,0.5)]';
+                      let textColor = 'text-red-400';
+                      let hoverColor = 'group-hover/item:text-red-400';
+                      
+                      if (area.precision >= 60) {
+                        barColor = 'bg-yellow-500';
+                        barShadow = '';
+                        textColor = 'text-yellow-400';
+                        hoverColor = 'group-hover/item:text-yellow-400';
+                      } else if (area.precision >= 40) {
+                        barColor = 'bg-orange-500';
+                        barShadow = '';
+                        textColor = 'text-orange-400';
+                        hoverColor = 'group-hover/item:text-orange-400';
+                      }
+
+                      return (
+                        <div
+                          key={area.topic_id}
+                          className="flex items-center justify-between group/item cursor-pointer"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div
+                              className={`h-10 w-1 ${barColor} rounded-full ${barShadow}`}
+                            ></div>
+                            <div>
+                              <p
+                                className={`text-white font-medium text-sm ${hoverColor} transition-colors`}
+                              >
+                                {area.topic_name}
+                              </p>
+                              <p className="text-xs text-text-secondary">
+                                {area.route_title}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <span
+                              className={`${textColor} font-bold text-sm`}
+                            >
+                              {area.precision}%
+                            </span>
+                            <p className="text-[10px] text-text-secondary">
+                              Precisión
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="text-center py-8">
+                      <p className="text-text-muted text-sm">
+                        No hay suficientes datos para mostrar focos de atención
+                      </p>
+                      <p className="text-text-muted text-xs mt-2">
+                        Responde al menos 3 preguntas por tema para ver tus áreas de mejora
+                      </p>
                     </div>
-                    <div className="text-right">
-                      <span className="text-red-400 font-bold text-sm">32%</span>
-                      <p className="text-[10px] text-text-secondary">Precisión</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between group/item cursor-pointer">
-                    <div className="flex items-center gap-3">
-                      <div className="h-10 w-1 bg-orange-500 rounded-full"></div>
-                      <div>
-                        <p className="text-white font-medium text-sm group-hover/item:text-orange-400 transition-colors">
-                          Dinámica
-                        </p>
-                        <p className="text-xs text-text-secondary">Física</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-orange-400 font-bold text-sm">
-                        55%
-                      </span>
-                      <p className="text-[10px] text-text-secondary">Precisión</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between group/item cursor-pointer">
-                    <div className="flex items-center gap-3">
-                      <div className="h-10 w-1 bg-yellow-500 rounded-full"></div>
-                      <div>
-                        <p className="text-white font-medium text-sm group-hover/item:text-yellow-400 transition-colors">
-                          Estequiometría
-                        </p>
-                        <p className="text-xs text-text-secondary">Química</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-yellow-400 font-bold text-sm">
-                        68%
-                      </span>
-                      <p className="text-[10px] text-text-secondary">Precisión</p>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>

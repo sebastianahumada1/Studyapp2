@@ -46,6 +46,77 @@ export function useRoutes() {
   });
 }
 
+// Fetch all routes with full tree structure
+export function useRoutesWithTree() {
+  return useQuery({
+    queryKey: ['routes-with-tree'],
+    queryFn: async () => {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) throw new Error('No autenticado');
+
+      // Fetch all routes
+      const { data: routes, error: routesError } = await supabase
+        .from('study_routes')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (routesError) throw routesError;
+      if (!routes || routes.length === 0) return [] as RouteWithTree[];
+
+      const routeIds = routes.map((r) => r.id);
+
+      // Fetch all topics for all routes
+      const { data: topics, error: topicsError } = await supabase
+        .from('study_topics')
+        .select('*')
+        .in('route_id', routeIds)
+        .order('order_index');
+
+      if (topicsError) throw topicsError;
+
+      const topicIds = topics?.map((t) => t.id) || [];
+
+      // Fetch all subtopics
+      const { data: subtopics, error: subtopicsError } = await supabase
+        .from('study_subtopics')
+        .select('*')
+        .in('topic_id', topicIds)
+        .order('order_index');
+
+      if (subtopicsError) throw subtopicsError;
+
+      const subtopicIds = subtopics?.map((s) => s.id) || [];
+
+      // Fetch all subsubtopics
+      const { data: subsubtopics, error: subsubtopicsError } = await supabase
+        .from('study_subsubtopics')
+        .select('*')
+        .in('subtopic_id', subtopicIds)
+        .order('order_index');
+
+      if (subsubtopicsError) throw subsubtopicsError;
+
+      // Build tree for each route
+      return routes.map((route) => {
+        const routeTopics = topics?.filter((t) => t.route_id === route.id) || [];
+        const routeSubtopics = subtopics?.filter((s) =>
+          routeTopics.some((t) => t.id === s.topic_id)
+        ) || [];
+        const routeSubsubtopics = subsubtopics?.filter((ss) =>
+          routeSubtopics.some((s) => s.id === ss.subtopic_id)
+        ) || [];
+
+        return buildRouteTree(route, routeTopics, routeSubtopics, routeSubsubtopics);
+      }) as RouteWithTree[];
+    },
+  });
+}
+
 // Fetch a single route with full tree
 export function useRoute(routeId: string) {
   return useQuery({

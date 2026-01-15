@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Diagnostic Grid - StudyApp Futurista</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;family=Noto+Sans:wght@300;400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#0df2f2",
+                        accent: "#a855f7",
+                        "background-dark": "#101e22",
+                        "card-dark": "rgba(255, 255, 255, 0.03)",
+                        "border-cyan": "rgba(13, 242, 242, 0.3)",
+                    },
+                    fontFamily: {
+                        display: ["Lexend", "sans-serif"],
+                        body: ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "12px",
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "radial-gradient(circle, rgba(13, 242, 242, 0.05) 1px, transparent 1px)",
+                    },
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body {
+                background-color: #101e22;
+                background-size: 30px 30px;
+            }
+        }
+        .glass-effect {
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .diagnostic-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .diagnostic-card:hover {
+            background: rgba(13, 242, 242, 0.05);
+            border-color: rgba(13, 242, 242, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px -10px rgba(13, 242, 242, 0.2);
+        }
+        .neon-text-cyan {
+            text-shadow: 0 0 8px rgba(13, 242, 242, 0.5);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(13, 242, 242, 0.3);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="font-body text-slate-200 min-h-screen bg-grid-pattern overflow-x-hidden">
+<div class="flex min-h-screen">
+<aside class="w-20 lg:w-64 border-r border-white/10 flex flex-col items-center py-8 glass-effect sticky top-0 h-screen z-20">
+<div class="mb-10 px-4">
+<div class="h-10 w-10 lg:w-auto lg:h-12 bg-primary/10 rounded-xl flex items-center justify-center p-2 border border-primary/40 shadow-[0_0_15px_rgba(13,242,242,0.2)]">
+<span class="material-symbols-outlined text-primary text-3xl">terminal</span>
+<span class="hidden lg:block ml-3 font-display font-bold text-xl tracking-tight text-white">StudyApp</span>
+</div>
+</div>
+<nav class="flex-1 w-full px-4 space-y-4">
+<a class="flex items-center justify-center lg:justify-start gap-4 p-3 rounded-xl bg-primary/10 text-primary border border-primary/20 transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="hidden lg:block font-medium">Dashboard</span>
+</a>
+<a class="flex items-center justify-center lg:justify-start gap-4 p-3 rounded-xl hover:bg-white/5 text-slate-400 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="hidden lg:block font-medium">Mis Cursos</span>
+</a>
+<a class="flex items-center justify-center lg:justify-start gap-4 p-3 rounded-xl hover:bg-white/5 text-slate-400 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="hidden lg:block font-medium">Progreso</span>
+</a>
+<a class="flex items-center justify-center lg:justify-start gap-4 p-3 rounded-xl hover:bg-white/5 text-slate-400 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="hidden lg:block font-medium">IA Tutor</span>
+</a>
+</nav>
+<div class="mt-auto w-full px-4 pb-4">
+<button class="flex items-center justify-center lg:justify-start gap-4 p-3 w-full rounded-xl hover:bg-red-500/10 text-slate-400 hover:text-red-400 transition-all">
+<span class="material-symbols-outlined">logout</span>
+<span class="hidden lg:block font-medium">Cerrar Sesión</span>
+</button>
+</div>
+</aside>
+<main class="flex-1 p-6 lg:p-10">
+<header class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-10">
+<div>
+<h1 class="text-3xl lg:text-4xl font-display font-bold text-white mb-2">
+                        Panel de <span class="text-primary neon-text-cyan">Diagnóstico</span>
+</h1>
+<p class="text-slate-400 max-w-2xl text-sm">
+                        Reconocimiento de patrones y análisis de errores en tiempo real.
+                    </p>
+</div>
+<div class="flex items-center gap-3">
+<button class="bg-white/5 border border-white/10 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-white/10 transition-all text-sm font-display uppercase tracking-widest">
+<span class="material-symbols-outlined text-sm">refresh</span>
+                        Escanear
+                    </button>
+<div class="h-10 w-10 rounded-full bg-gradient-to-tr from-primary to-accent p-0.5">
+<div class="h-full w-full rounded-full bg-background-dark flex items-center justify-center text-[10px] font-bold text-white">
+                            JD
+                        </div>
+</div>
+</div>
+</header>
+<section class="glass-effect rounded-2xl p-6 mb-8 border-white/5">
+<div class="flex items-center gap-2 mb-6 text-primary">
+<span class="material-symbols-outlined">tune</span>
+<h2 class="font-display font-semibold uppercase tracking-wider text-xs">Filtros de Análisis</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="space-y-2">
+<label class="text-[10px] font-bold text-slate-500 flex items-center gap-1 uppercase tracking-tighter">
+<span class="material-symbols-outlined text-xs">calendar_month</span> Periodo
+                        </label>
+<input class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-white text-sm" type="date"/>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] font-bold text-slate-500 flex items-center gap-1 uppercase tracking-tighter">
+<span class="material-symbols-outlined text-xs">alt_route</span> Ruta
+                        </label>
+<select class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-white text-sm appearance-none">
+<option value="">Todas las rutas</option>
+<option value="security">Ciberseguridad</option>
+<option value="medicine">Medicina</option>
+</select>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] font-bold text-slate-500 flex items-center gap-1 uppercase tracking-tighter">
+<span class="material-symbols-outlined text-xs">topic</span> Tema
+                        </label>
+<select class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-white text-sm appearance-none">
+<option value="">Cualquier tema</option>
+<option value="fundamentals">Fundamentos</option>
+<option value="advanced">Avanzado</option>
+</select>
+</div>
+<div class="space-y-2 flex items-end">
+<button class="w-full bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 py-2.5 rounded-xl transition-all text-sm font-semibold flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">search</span>
+                            Aplicar Filtros
+                        </button>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+<article class="diagnostic-card rounded-2xl p-5 flex flex-col group">
+<div class="flex items-start justify-between mb-4">
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-1">Ruta de Estudio</span>
+<div class="flex items-center gap-2">
+<div class="w-1 h-4 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
+<h3 class="text-sm font-semibold text-white tracking-tight">CompTIA Security+</h3>
+</div>
+</div>
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold bg-pink-500/10 text-pink-400 border border-pink-500/30 uppercase tracking-widest shadow-[0_0_8px_rgba(236,72,153,0.1)]">
+                            Conceptual
+                        </span>
+</div>
+<div class="space-y-3 flex-1">
+<div>
+<span class="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">Tema / Subtema</span>
+<div class="mt-1">
+<p class="text-xs font-medium text-slate-200">Cybersecurity Fundamentals</p>
+<p class="text-[11px] text-primary/70 flex items-center gap-1 italic">
+<span class="material-symbols-outlined text-[12px]">subdirectory_arrow_right</span>
+                                    Cyber Threats Taxonomy
+                                </p>
+</div>
+</div>
+<div class="bg-white/5 rounded-lg p-3 border border-white/5">
+<span class="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">Conclusión de Error</span>
+<p class="mt-1 text-xs text-slate-400 leading-relaxed">
+                                Confusión entre vectores de ataque y tipos de malware. Reforzar definición de 'Phishing' vs 'Rootkit'.
+                            </p>
+</div>
+</div>
+<div class="mt-5 pt-4 border-t border-white/5 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-[9px] font-mono text-slate-500 uppercase">2026-01-12</span>
+<span class="text-[8px] text-slate-600 uppercase">14:30 GMT</span>
+</div>
+<div class="flex gap-2">
+<button class="h-8 w-8 rounded-lg flex items-center justify-center border border-primary/30 text-primary hover:bg-primary hover:text-background-dark transition-all" title="Ver Detalles">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+<button class="h-8 w-8 rounded-lg flex items-center justify-center border border-accent/30 text-accent hover:bg-accent hover:text-background-dark transition-all" title="Editar">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+</div>
+</div>
+</article>
+<article class="diagnostic-card rounded-2xl p-5 flex flex-col group">
+<div class="flex items-start justify-between mb-4">
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-1">Ruta de Estudio</span>
+<div class="flex items-center gap-2">
+<div class="w-1 h-4 bg-purple-500 rounded-full shadow-[0_0_8px_rgba(168,85,247,0.5)]"></div>
+<h3 class="text-sm font-semibold text-white tracking-tight">Medicina Interna</h3>
+</div>
+</div>
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold bg-orange-500/10 text-orange-400 border border-orange-500/30 uppercase tracking-widest shadow-[0_0_8px_rgba(249,115,22,0.1)]">
+                            Procedural
+                        </span>
+</div>
+<div class="space-y-3 flex-1">
+<div>
+<span class="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">Tema / Subtema</span>
+<div class="mt-1">
+<p class="text-xs font-medium text-slate-200">Neumología Especial</p>
+<p class="text-[11px] text-primary/70 flex items-center gap-1 italic">
+<span class="material-symbols-outlined text-[12px]">subdirectory_arrow_right</span>
+                                    Oncología Torácica
+                                </p>
+</div>
+</div>
+<div class="bg-white/5 rounded-lg p-3 border border-white/5">
+<span class="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">Conclusión de Error</span>
+<p class="mt-1 text-xs text-slate-400 leading-relaxed">
+                                Error en el orden de pruebas diagnósticas. Se debe priorizar la TC antes de la biopsia invasiva.
+                            </p>
+</div>
+</div>
+<div class="mt-5 pt-4 border-t border-white/5 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-[9px] font-mono text-slate-500 uppercase">2026-01-14</span>
+<span class="text-[8px] text-slate-600 uppercase">09:15 GMT</span>
+</div>
+<div class="flex gap-2">
+<button class="h-8 w-8 rounded-lg flex items-center justify-center border border-primary/30 text-primary hover:bg-primary hover:text-background-dark transition-all" title="Ver Detalles">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+<button class="h-8 w-8 rounded-lg flex items-center justify-center border border-accent/30 text-accent hover:bg-accent hover:text-background-dark transition-all" title="Editar">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+</div>
+</div>
+</article>
+<article class="diagnostic-card rounded-2xl p-5 flex flex-col group">
+<div class="flex items-start justify-between mb-4">
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-primary/60 uppercase tracking-widest mb-1">Ruta de Estudio</span>
+<div class="flex items-center gap-2">
+<div class="w-1 h-4 bg-blue-500 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
+<h3 class="text-sm font-semibold text-white tracking-tight">CompTIA Security+</h3>
+</div>
+</div>
+<span class="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 uppercase tracking-widest shadow-[0_0_8px_rgba(6,182,212,0.1)]">
+                            Factual
+                        </span>
+</div>
+<div class="space-y-3 flex-1">
+<div>
+<span class="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">Tema / Subtema</span>
+<div class="mt-1">
+<p class="text-xs font-medium text-slate-200">Redes Seguras</p>
+<p class="text-[11px] text-primary/70 flex items-center gap-1 italic">
+<span class="material-symbols-outlined text-[12px]">subdirectory_arrow_right</span>
+                                    Protocolos SSL/TLS
+                                </p>
+</div>
+</div>
+<div class="bg-white/5 rounded-lg p-3 border border-white/5">
+<span class="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">Conclusión de Error</span>
+<p class="mt-1 text-xs text-slate-400 leading-relaxed">
+                                Memorizar números de puertos específicos. TLS por defecto usa 443 pero la configuración era custom.
+                            </p>
+</div>
+</div>
+<div class="mt-5 pt-4 border-t border-white/5 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-[9px] font-mono text-slate-500 uppercase">2026-01-15</span>
+<span class="text-[8px] text-slate-600 uppercase">18:00 GMT</span>
+</div>
+<div class="flex gap-2">
+<button class="h-8 w-8 rounded-lg flex items-center justify-center border border-primary/30 text-primary hover:bg-primary hover:text-background-dark transition-all" title="Ver Detalles">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+<button class="h-8 w-8 rounded-lg flex items-center justify-center border border-accent/30 text-accent hover:bg-accent hover:text-background-dark transition-all" title="Editar">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+<div class="glass-effect rounded-2xl px-6 py-4 flex items-center justify-between border-white/5">
+<button class="text-[10px] font-bold uppercase tracking-wider text-slate-500 hover:text-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">chevron_left</span> Anterior
+                </button>
+<div class="flex gap-2">
+<span class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-background-dark font-bold text-xs shadow-[0_0_10px_rgba(13,242,242,0.3)] cursor-default">1</span>
+<span class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/5 text-slate-500 text-xs cursor-pointer border border-transparent hover:border-white/10 transition-all font-display">2</span>
+<span class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/5 text-slate-500 text-xs cursor-pointer border border-transparent hover:border-white/10 transition-all font-display">3</span>
+</div>
+<button class="text-[10px] font-bold uppercase tracking-wider text-slate-500 hover:text-primary transition-colors flex items-center gap-1">
+                    Siguiente <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</main>
+</div>
+<div class="fixed bottom-6 right-6 z-50">
+<button class="group relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-primary to-accent shadow-[0_0_20px_rgba(13,242,242,0.4)] hover:scale-110 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-white text-2xl">smart_toy</span>
+<div class="absolute -top-12 right-0 bg-background-dark/90 backdrop-blur-md px-3 py-1.5 rounded-lg text-[10px] font-bold text-primary uppercase tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity border border-primary/20 pointer-events-none">
+                Análisis de Patrones IA
+            </div>
+</button>
+</div>
+
+</body></html>

@@ -1,12 +1,15 @@
 'use client';
 
-interface HubMainContentProps {
-  onCreateManual?: () => void;
-  onCreateCSV?: () => void;
-  onCreateAI?: () => void;
-}
+import { useState } from 'react';
+import { CreateQuestionModal } from './CreateQuestionModal';
+import { CSVImportQuestionsModal } from './CSVImportQuestionsModal';
+import { AIGenerateQuestionsModal } from './AIGenerateQuestionsModal';
 
-export function HubMainContent({ onCreateManual, onCreateCSV, onCreateAI }: HubMainContentProps) {
+export function QuestionsMainContent() {
+  const [showManualModal, setShowManualModal] = useState(false);
+  const [showCSVModal, setShowCSVModal] = useState(false);
+  const [showAIModal, setShowAIModal] = useState(false);
+
   return (
     <div className="max-w-[1400px] mx-auto p-4 md:p-8 flex flex-col gap-8">
       {/* Header */}
@@ -15,15 +18,15 @@ export function HubMainContent({ onCreateManual, onCreateCSV, onCreateAI }: HubM
           <div className="flex items-center gap-2 mb-2">
             <span className="h-px w-8 bg-primary"></span>
             <span className="text-primary text-xs font-bold uppercase tracking-widest">
-              Rutas de Estudio
+              Banco de Preguntas
             </span>
           </div>
           <h2 className="text-white text-3xl md:text-4xl font-display font-bold tracking-tight mb-2">
-            Crear Nuevas Rutas
+            Crear Nuevas Preguntas
           </h2>
           <p className="text-text-muted max-w-2xl">
-            Crea rutas de estudio manualmente, importa desde CSV o deja que nuestra IA genere rutas
-            personalizadas basadas en tus objetivos de aprendizaje.
+            Crea preguntas manualmente, importa desde CSV o deja que nuestra IA genere preguntas
+            personalizadas para tu banco.
           </p>
         </div>
       </div>
@@ -33,7 +36,7 @@ export function HubMainContent({ onCreateManual, onCreateCSV, onCreateAI }: HubM
         {/* Manual Creation */}
         <div
           className="group relative bg-surface-dark rounded-2xl p-6 border border-white/5 hover:border-primary/30 transition-all cursor-pointer hover:-translate-y-1 shadow-lg"
-          onClick={onCreateManual}
+          onClick={() => setShowManualModal(true)}
         >
           <div className="size-12 rounded-xl bg-[#231e3d] flex items-center justify-center text-text-muted group-hover:text-primary group-hover:bg-primary/10 mb-4 transition-colors">
             <span className="material-symbols-outlined text-[28px]">edit_document</span>
@@ -42,7 +45,7 @@ export function HubMainContent({ onCreateManual, onCreateCSV, onCreateAI }: HubM
             Crear Manualmente
           </h3>
           <p className="text-text-muted text-sm">
-            Diseña tu ruta tema por tema seleccionando los contenidos.
+            Crea preguntas personalizadas con opciones de respuesta y asócialas a tu contenido.
           </p>
           <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
             <span className="material-symbols-outlined text-primary/20">arrow_forward</span>
@@ -52,7 +55,7 @@ export function HubMainContent({ onCreateManual, onCreateCSV, onCreateAI }: HubM
         {/* CSV Import */}
         <div
           className="group relative bg-surface-dark rounded-2xl p-6 border border-white/5 hover:border-primary/30 transition-all cursor-pointer hover:-translate-y-1 shadow-lg"
-          onClick={onCreateCSV}
+          onClick={() => setShowCSVModal(true)}
         >
           <div className="size-12 rounded-xl bg-[#231e3d] flex items-center justify-center text-text-muted group-hover:text-primary group-hover:bg-primary/10 mb-4 transition-colors">
             <span className="material-symbols-outlined text-[28px]">upload_file</span>
@@ -61,7 +64,7 @@ export function HubMainContent({ onCreateManual, onCreateCSV, onCreateAI }: HubM
             Importar desde CSV
           </h3>
           <p className="text-text-muted text-sm">
-            Carga planes de estudio masivos desde hojas de cálculo.
+            Carga múltiples preguntas desde un archivo CSV de forma masiva.
           </p>
           <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
             <span className="material-symbols-outlined text-primary/20">arrow_forward</span>
@@ -71,7 +74,7 @@ export function HubMainContent({ onCreateManual, onCreateCSV, onCreateAI }: HubM
         {/* AI Generate */}
         <div
           className="group relative bg-surface-dark rounded-2xl p-6 border border-primary/30 hover:border-primary transition-all cursor-pointer hover:-translate-y-1 shadow-[0_0_20px_rgba(13,242,242,0.15)] overflow-hidden"
-          onClick={onCreateAI}
+          onClick={() => setShowAIModal(true)}
         >
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           <div className="absolute -top-10 -right-10 size-32 bg-primary/20 blur-[60px] rounded-full pointer-events-none"></div>
@@ -87,11 +90,21 @@ export function HubMainContent({ onCreateManual, onCreateCSV, onCreateAI }: HubM
             Generar con IA
           </h3>
           <p className="text-primary/70 text-sm relative z-10">
-            Nuestra IA analiza tus objetivos y crea una ruta optimizada automáticamente.
+            Nuestra IA genera preguntas personalizadas basadas en tu contenido de estudio.
           </p>
         </div>
       </div>
+
+      {/* Modals */}
+      {showManualModal && (
+        <CreateQuestionModal onClose={() => setShowManualModal(false)} />
+      )}
+      {showCSVModal && (
+        <CSVImportQuestionsModal onClose={() => setShowCSVModal(false)} />
+      )}
+      {showAIModal && (
+        <AIGenerateQuestionsModal onClose={() => setShowAIModal(false)} />
+      )}
     </div>
   );
 }
-

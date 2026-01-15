@@ -1,8 +1,8 @@
 import { Sidebar } from '@/components/Sidebar';
 import { requireAuth } from '@/lib/auth';
-import { HubContent } from '@/components/knowledge-hub/HubContent';
+import { ErrorsContent } from '@/components/errors/ErrorsContent';
 
-export default async function HubPage() {
+export default async function ErrorsPage() {
   await requireAuth();
 
   return (
@@ -10,9 +10,8 @@ export default async function HubPage() {
       <Sidebar />
 
       <main className="flex-1 h-full overflow-hidden relative bg-background-dark">
-        <HubContent />
+        <ErrorsContent />
       </main>
     </div>
   );
 }
-

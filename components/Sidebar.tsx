@@ -103,28 +103,17 @@ export function Sidebar() {
               Hub de Conocimiento
             </p>
           </Link>
-          <a
-            className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-white/5 text-text-secondary hover:text-white transition-colors group"
-            href="#"
-          >
-            <span className="material-symbols-outlined text-[24px] group-hover:text-accent transition-colors">
-              menu_book
-            </span>
-            <p className="hidden lg:block text-sm font-medium leading-normal">
-              Rutas de Estudio
-            </p>
-          </a>
           <Link
-            href="/evaluacion"
+            href="/assessment"
             className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all group ${
-              pathname?.startsWith('/evaluacion')
+              pathname?.startsWith('/assessment') || pathname?.startsWith('/evaluacion')
                 ? 'bg-gradient-to-r from-primary/20 to-transparent border-l-4 border-primary text-white'
                 : 'hover:bg-white/5 text-text-secondary hover:text-white'
             }`}
           >
             <span
               className={`material-symbols-outlined text-[24px] transition-colors ${
-                pathname?.startsWith('/evaluacion')
+                pathname?.startsWith('/assessment') || pathname?.startsWith('/evaluacion')
                   ? 'text-primary group-hover:text-white'
                   : 'group-hover:text-accent'
               }`}
@@ -135,28 +124,48 @@ export function Sidebar() {
               Evaluación
             </p>
           </Link>
-          <a
-            className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-white/5 text-text-secondary hover:text-white transition-colors group"
-            href="#"
+          <Link
+            href="/mentor"
+            className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all group ${
+              pathname?.startsWith('/mentor')
+                ? 'bg-gradient-to-r from-primary/20 to-transparent border-l-4 border-primary text-white'
+                : 'hover:bg-white/5 text-text-secondary hover:text-white'
+            }`}
           >
-            <span className="material-symbols-outlined text-[24px] group-hover:text-accent transition-colors">
+            <span
+              className={`material-symbols-outlined text-[24px] transition-colors ${
+                pathname?.startsWith('/mentor')
+                  ? 'text-primary group-hover:text-white'
+                  : 'group-hover:text-accent'
+              }`}
+            >
+              chat_bubble
+            </span>
+            <p className="hidden lg:block text-sm font-medium leading-normal">
+              Mentor IA
+            </p>
+          </Link>
+          <Link
+            href="/errors"
+            className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all group ${
+              pathname?.startsWith('/errors')
+                ? 'bg-gradient-to-r from-primary/20 to-transparent border-l-4 border-primary text-white'
+                : 'hover:bg-white/5 text-text-secondary hover:text-white'
+            }`}
+          >
+            <span
+              className={`material-symbols-outlined text-[24px] transition-colors ${
+                pathname?.startsWith('/errors')
+                  ? 'text-primary group-hover:text-white'
+                  : 'group-hover:text-accent'
+              }`}
+            >
               assignment_late
             </span>
             <p className="hidden lg:block text-sm font-medium leading-normal">
               Dashboard de Errores
             </p>
-          </a>
-          <a
-            className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-white/5 text-text-secondary hover:text-white transition-colors group"
-            href="#"
-          >
-            <span className="material-symbols-outlined text-[24px] group-hover:text-accent transition-colors">
-              monitoring
-            </span>
-            <p className="hidden lg:block text-sm font-medium leading-normal">
-              Estadísticas
-            </p>
-          </a>
+          </Link>
         </nav>
       </div>
 

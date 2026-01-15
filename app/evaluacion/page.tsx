@@ -35,62 +35,8 @@ export default async function EvaluacionPage() {
             </p>
           </div>
 
-          <Grid cols={2} gap="lg" className="mt-8">
-            {/* Banco de Preguntas Card */}
-            <Card className="group relative flex flex-col bg-surface-dark border border-border-dark rounded-2xl p-1 tech-card-clip transition-all duration-500 hover:border-primary hover:shadow-neon hover:-translate-y-1 h-full">
-              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                <span className="material-symbols-outlined text-[120px] text-primary rotate-12">
-                  folder_data
-                </span>
-              </div>
-              <div className="flex-1 bg-background-dark/50 rounded-xl p-8 flex flex-col gap-6 backdrop-blur-sm h-full tech-card-clip">
-                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-surface-dark to-background-dark border border-border-dark flex items-center justify-center shadow-lg group-hover:shadow-neon-sm transition-all group-hover:border-primary/50">
-                  <span className="material-symbols-outlined text-3xl text-primary">
-                    inventory_2
-                  </span>
-                </div>
-                <div className="flex-col gap-2">
-                  <h3 className="text-2xl font-bold text-white group-hover:text-primary transition-colors">
-                    Banco de Preguntas
-                  </h3>
-                  <div className="h-1 w-12 bg-border-dark rounded-full mt-2 group-hover:bg-primary group-hover:w-24 transition-all duration-500"></div>
-                </div>
-                <p className="text-text-muted font-body leading-relaxed text-sm">
-                  Gestiona, busca y organiza el contenido de preguntas por temas y subtemas.
-                  Consulta rápidamente la base de conocimiento para configurar pruebas.
-                </p>
-                <ul className="flex flex-col gap-2 text-xs text-text-muted/80 mt-auto mb-6">
-                  <li className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary text-sm">
-                      check_circle
-                    </span>
-                    <span>Búsqueda rápida</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary text-sm">
-                      check_circle
-                    </span>
-                    <span>Vista general de tópicos</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary text-sm">
-                      check_circle
-                    </span>
-                    <span>Acceso a edición limitada</span>
-                  </li>
-                </ul>
-                <Link href="/evaluacion/banco-preguntas" className="w-full">
-                  <Button className="w-full py-3 px-6 rounded-lg bg-surface-dark border border-primary/30 text-primary font-bold uppercase tracking-wider text-xs flex items-center justify-between group-hover:bg-primary group-hover:text-background-dark transition-all duration-300">
-                    <span>Explorar Banco</span>
-                    <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">
-                      arrow_forward
-                    </span>
-                  </Button>
-                </Link>
-              </div>
-            </Card>
-
-            {/* Ponte a Prueba Card */}
+          <Grid cols={1} gap="lg" className="mt-8 max-w-4xl">
+            {/* Pon a Prueba tus conocimientos Card */}
             <Card className="group relative flex flex-col bg-surface-dark border border-border-dark rounded-2xl p-1 tech-card-clip transition-all duration-500 hover:border-primary hover:shadow-neon hover:-translate-y-1 h-full">
               <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                 <span className="material-symbols-outlined text-[150px] text-primary -rotate-12">

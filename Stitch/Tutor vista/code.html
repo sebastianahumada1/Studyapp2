@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tutor IA - Interfaz de Chat Optimizada</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;family=Noto+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0df2f2",
+                        "bg-main": "#101e22",
+                        "panel-dark": "#0d181b",
+                        "user-msg": "#1a4d52",
+                        "tutor-msg": "rgba(255, 255, 255, 0.05)",
+                    },
+                    fontFamily: {
+                        "lexend": ["Lexend", "sans-serif"],
+                        "noto": ["Noto Sans", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .glass-tutor {
+                background: rgba(255, 255, 255, 0.05);
+                backdrop-filter: blur(12px);
+                border: 1px solid rgba(13, 242, 242, 0.2);
+            }
+            .grid-pattern {
+                background-image: radial-gradient(circle, rgba(13, 242, 242, 0.05) 1px, transparent 1px);
+                background-size: 24px 24px;
+            }
+            .custom-scrollbar::-webkit-scrollbar {
+                width: 4px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: rgba(13, 242, 242, 0.2);
+                border-radius: 10px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-bg-main font-noto text-slate-200 antialiased overflow-hidden h-screen flex">
+<nav class="w-16 flex flex-col items-center py-6 gap-8 border-r border-white/5 bg-panel-dark">
+<div class="size-10 rounded-lg bg-primary/20 flex items-center justify-center text-primary shadow-[0_0_15px_rgba(13,242,242,0.2)]">
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<div class="flex flex-col gap-6 mt-4">
+<div class="size-10 flex items-center justify-center rounded-lg text-slate-500 hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined">dashboard</span>
+</div>
+<div class="size-10 flex items-center justify-center rounded-lg text-primary bg-primary/10 transition-colors cursor-pointer">
+<span class="material-symbols-outlined">chat_bubble</span>
+</div>
+<div class="size-10 flex items-center justify-center rounded-lg text-slate-500 hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined">school</span>
+</div>
+<div class="size-10 flex items-center justify-center rounded-lg text-slate-500 hover:text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+</div>
+<div class="mt-auto">
+<div class="size-8 rounded-full border border-white/10 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD-3oheyS5h0OFohzYth6wuOjSxU-8hEGFIpOKaeYcfAfmkBpqMJ6vK0giotU-qYd7hOHj8DIgJ2FRzyqFG40PS2NJaD_elqXpns0LWFKSLm1T0_q5HpHYYwN-o-zxUasCGamhoEo9ICrFZHtvgvCskArSt-LXiPXY6sQla5wUy25eIrF-hZmRjKR6U_n8S-88mY9vMRXy5l9M1-HfhfhMFANyQT271GmIMH67Le6DwtTo9cFrC2MqDalgs4r0SeFO3-xohRo6f9A3M')"></div>
+</div>
+</nav>
+<aside class="w-[30%] min-w-[320px] max-w-[400px] flex flex-col border-r border-white/5 bg-bg-main">
+<header class="p-6">
+<div class="flex items-center justify-between mb-6">
+<h1 class="font-lexend text-xl font-bold text-white tracking-tight">Sesiones</h1>
+<button class="p-2 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-all">
+<span class="material-symbols-outlined">add_comment</span>
+</button>
+</div>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">search</span>
+<input class="w-full bg-white/5 border-white/10 rounded-xl pl-10 text-sm focus:ring-1 focus:ring-primary/50 focus:border-primary/50 transition-all text-slate-300" placeholder="Buscar tutoría..." type="text"/>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto custom-scrollbar px-3 space-y-1 pb-4">
+<div class="group flex items-start gap-3 p-4 rounded-2xl bg-primary/5 border border-primary/20 cursor-pointer transition-all hover:bg-primary/10">
+<div class="relative flex-shrink-0">
+<div class="size-12 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30 text-primary">
+<span class="material-symbols-outlined">terminal</span>
+</div>
+<div class="absolute -bottom-1 -right-1 size-3 bg-green-500 rounded-full border-2 border-bg-main"></div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-lexend text-sm font-semibold text-white truncate">React Hooks Deep Dive</h3>
+<span class="text-[10px] text-slate-500 whitespace-nowrap">hace 2 h</span>
+</div>
+<p class="text-xs text-slate-400 truncate font-noto">Tutor: ¡Hola! He analizado tu código...</p>
+</div>
+</div>
+<div class="group flex items-start gap-3 p-4 rounded-2xl border border-transparent hover:bg-white/5 cursor-pointer transition-all">
+<div class="relative flex-shrink-0">
+<div class="size-12 rounded-xl bg-slate-800/50 flex items-center justify-center border border-white/5 text-slate-400 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">database</span>
+</div>
+<div class="absolute -bottom-1 -right-1 size-3 bg-yellow-500 rounded-full border-2 border-bg-main"></div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-lexend text-sm font-medium text-slate-300 truncate group-hover:text-white transition-colors">Python Data Analysis</h3>
+<span class="text-[10px] text-slate-500 whitespace-nowrap">Ayer</span>
+</div>
+<p class="text-xs text-slate-500 truncate font-noto">Sesión lista para comenzar.</p>
+</div>
+</div>
+<div class="group flex items-start gap-3 p-4 rounded-2xl border border-transparent hover:bg-white/5 cursor-pointer transition-all">
+<div class="relative flex-shrink-0">
+<div class="size-12 rounded-xl bg-slate-800/50 flex items-center justify-center border border-white/5 text-slate-500 group-hover:text-slate-300 transition-colors">
+<span class="material-symbols-outlined">style</span>
+</div>
+<div class="absolute -bottom-1 -right-1 size-3 bg-slate-600 rounded-full border-2 border-bg-main"></div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-lexend text-sm font-medium text-slate-400 truncate">Advanced CSS Layouts</h3>
+<span class="text-[10px] text-slate-600 whitespace-nowrap">24 de oct.</span>
+</div>
+<p class="text-xs text-slate-600 truncate font-noto">Conceptos de Grid y Flexbox dominados.</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col relative">
+<div class="absolute inset-0 grid-pattern opacity-40 pointer-events-none"></div>
+<header class="h-20 bg-bg-main/80 backdrop-blur-md border-b border-white/5 flex items-center justify-between px-8 z-10">
+<div class="flex items-center gap-4">
+<div class="size-11 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">smart_toy</span>
+</div>
+<div>
+<h2 class="font-lexend text-base font-bold text-white leading-tight">Tutor Frontend IA</h2>
+<div class="flex items-center gap-2 mt-1">
+<span class="size-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]"></span>
+<span class="text-xs text-primary font-medium tracking-wide">Especialista en React y Typescript</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-[11px] items-center gap-2">
+<span class="text-primary font-bold">OBJETIVO:</span>
+<span class="text-slate-400 uppercase tracking-widest">Mastering UseEffect Lifecycle</span>
+</div>
+<button class="text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined">settings_suggest</span>
+</button>
+<button class="text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto custom-scrollbar p-8 flex flex-col gap-6 z-0">
+<div class="flex flex-col gap-2 max-w-[75%] self-start group">
+<div class="glass-tutor rounded-2xl rounded-tl-none p-5 text-slate-200 shadow-lg transition-all">
+<p class="leading-relaxed mb-4">¡Hola! He analizado tu código. Los Hooks de React pueden parecer complejos al principio, pero son herramientas poderosas para el control del estado y los efectos.</p>
+<div class="bg-[#050b0c] rounded-xl p-4 border border-white/5 font-mono text-xs overflow-x-auto shadow-inner">
+<code class="block whitespace-pre text-primary/80"><span class="text-purple-400">useEffect</span>(() =&gt; {
+  <span class="text-slate-500">// Este efecto se ejecuta después del render</span>
+<span class="text-blue-400">console</span>.<span class="text-blue-300">log</span>(<span class="text-orange-300">'Componente Montado'</span>);
+  <span class="text-purple-400">return</span> () =&gt; <span class="text-blue-300">console</span>.<span class="text-blue-300">log</span>(<span class="text-orange-300">'Limpieza'</span>);
+}, []);</code>
+</div>
+<p class="mt-4 leading-relaxed">¿Te gustaría profundizar en el array de dependencias o prefieres ver cómo manejar estados complejos?</p>
+</div>
+<div class="flex items-center gap-2 px-1">
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Tutor IA</span>
+<span class="text-[10px] text-slate-600">10:42 AM</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 max-w-[75%] self-end">
+<div class="bg-primary/20 border border-primary/30 rounded-2xl rounded-tr-none p-5 text-white shadow-xl">
+<p class="leading-relaxed">Me gustaría entender mejor el array de dependencias. ¿Qué pasa si olvido incluir una variable que uso dentro del efecto?</p>
+</div>
+<div class="flex items-center gap-2 px-1 self-end">
+<span class="text-[10px] text-slate-600">10:45 AM</span>
+<span class="text-[10px] font-bold text-primary uppercase tracking-widest">Estudiante</span>
+</div>
+</div>
+<div class="flex items-center gap-4 self-start bg-white/5 px-5 py-3 rounded-full border border-white/5 shadow-lg">
+<div class="flex gap-1">
+<div class="size-1.5 bg-primary rounded-full animate-bounce"></div>
+<div class="size-1.5 bg-primary rounded-full animate-bounce [animation-delay:0.2s]"></div>
+<div class="size-1.5 bg-primary rounded-full animate-bounce [animation-delay:0.4s]"></div>
+</div>
+<span class="text-[11px] font-lexend font-medium text-primary uppercase tracking-widest">Procesando respuesta técnica...</span>
+</div>
+</div>
+<footer class="p-6 bg-bg-main/90 backdrop-blur-xl border-t border-white/5 z-10">
+<div class="max-w-4xl mx-auto">
+<div class="bg-white/5 border border-white/10 rounded-2xl p-2 pl-4 flex items-center gap-3 focus-within:border-primary/50 transition-all shadow-2xl">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-xl">attachment</span>
+</button>
+<textarea class="flex-1 bg-transparent border-none focus:ring-0 text-slate-200 text-sm placeholder:text-slate-500 py-3 resize-none font-noto" placeholder="Escribe tu consulta sobre React, Python o CSS..." rows="1"></textarea>
+<div class="flex items-center gap-2 pr-1">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">mic</span>
+</button>
+<button class="bg-primary text-bg-main px-5 py-2.5 rounded-xl font-lexend font-bold text-xs uppercase tracking-wider flex items-center gap-2 hover:shadow-[0_0_20px_rgba(13,242,242,0.4)] transition-all active:scale-95">
+<span>Enviar</span>
+<span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+</div>
+<div class="flex justify-center gap-8 mt-4 text-[10px] font-bold text-slate-600 uppercase tracking-widest">
+<span>Engine: GPT-4 Advanced Tutor</span>
+<span class="text-primary/40">•</span>
+<span>Modo: Interactivo de alto rendimiento</span>
+</div>
+</div>
+</footer>
+</main>
+
+</body></html>

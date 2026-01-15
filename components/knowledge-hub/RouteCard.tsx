@@ -191,7 +191,6 @@ export function RouteCard({ route }: RouteCardProps) {
                         ? 'secondary'
                         : 'default'
                   }
-                  onClick={(e) => e.preventDefault()}
                   className="text-xs"
                 >
                   {route.status === 'completado'
