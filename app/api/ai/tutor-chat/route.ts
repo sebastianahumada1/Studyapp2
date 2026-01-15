@@ -99,17 +99,21 @@ export async function POST(request: Request): Promise<Response> {
         }> = [];
 
         for (const answer of errorsData) {
-          const question = answer.question;
-          if (!question) continue;
+          // Supabase may return question as array or object
+          const questionData = Array.isArray(answer.question) 
+            ? answer.question[0] 
+            : answer.question;
+          
+          if (!questionData) continue;
 
           // Parse options
           let options: Array<{ text: string }> = [];
-          if (question.options) {
+          if (questionData.options) {
             try {
               const parsedOptions =
-                typeof question.options === 'string'
-                  ? JSON.parse(question.options)
-                  : question.options;
+                typeof questionData.options === 'string'
+                  ? JSON.parse(questionData.options)
+                  : questionData.options;
               if (Array.isArray(parsedOptions)) {
                 options = parsedOptions;
               }
@@ -119,17 +123,17 @@ export async function POST(request: Request): Promise<Response> {
           }
 
           const selectedAnswer = options[answer.selected_answer_index]?.text || '';
-          const correctAnswer = options[question.correct_answer_index]?.text || '';
-          const subtopic = Array.isArray(question.subtopic)
-            ? question.subtopic[0]
-            : question.subtopic;
+          const correctAnswer = options[questionData.correct_answer_index]?.text || '';
+          const subtopic = Array.isArray(questionData.subtopic)
+            ? questionData.subtopic[0]
+            : questionData.subtopic;
 
           errors.push({
-            question_id: question.id,
-            question_text: question.question_text,
+            question_id: questionData.id,
+            question_text: questionData.question_text,
             user_answer: selectedAnswer,
             correct_answer: correctAnswer,
-            subtopic_id: question.subtopic_id || undefined,
+            subtopic_id: questionData.subtopic_id || undefined,
             subtopic_name: subtopic?.name || undefined,
           });
         }
