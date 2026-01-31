@@ -1,0 +1,1 @@
+ALTER TABLE credit_ledger ADD COLUMN expires_at timestamptz; ALTER TYPE ledger_reason ADD VALUE IF NOT EXISTS 'credits_expired';
