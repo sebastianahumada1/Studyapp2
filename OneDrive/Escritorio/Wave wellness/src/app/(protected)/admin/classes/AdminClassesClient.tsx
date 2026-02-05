@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent } from '@/components/ui/base/card'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/base/card'
 import {
   Accordion,
   AccordionContent,

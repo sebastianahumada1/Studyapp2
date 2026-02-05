@@ -70,10 +70,10 @@ export default function StudentPaymentsPage() {
       if (error) throw error
       setPackages(data || [])
     } catch (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'No se pudieron cargar los planes',
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'No se pudieron cargar los planes',
       })
     } finally {
       setLoadingPackages(false)
@@ -96,10 +96,10 @@ export default function StudentPaymentsPage() {
       if (error) throw error
       setPayments(data || [])
     } catch (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'No se pudieron cargar los pagos',
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: 'No se pudieron cargar los pagos',
       })
     } finally {
       setLoadingPayments(false)
@@ -125,18 +125,18 @@ export default function StudentPaymentsPage() {
       // 1. Si no hay paymentId, es una compra nueva, crear el registro primero
       if (!paymentId && selectedPackage) {
         const { data: payment, error: insertError } = await supabase
-          .from('payments')
-          .insert({
-            student_id: user.id,
+        .from('payments')
+        .insert({
+          student_id: user.id,
             package_id: selectedPackage.id,
             package_name: selectedPackage.name,
             package_credits: selectedPackage.credits,
             amount: selectedPackage.price,
             package_validity_days: selectedPackage.validity_days,
-            status: 'pending',
-          })
-          .select()
-          .single()
+          status: 'pending',
+        })
+        .select()
+        .single()
 
         if (insertError) throw insertError
         paymentId = payment.id
@@ -245,11 +245,11 @@ export default function StudentPaymentsPage() {
         {showHistory ? (
           /* Historial de Pagos */
           <div className="space-y-4">
-            {loadingPayments ? (
+        {loadingPayments ? (
               <div className="flex justify-center py-12">
                 <Loader2 className="h-8 w-8 animate-spin text-[#CEB49D]" />
               </div>
-            ) : payments.length === 0 ? (
+        ) : payments.length === 0 ? (
               <div className="text-center py-12 bg-white/40 rounded-[32px] border border-white/60">
                 <CreditCard className="h-12 w-12 mx-auto text-black/10 mb-4" />
                 <p className="text-sm text-black/40 italic">No tienes pagos registrados</p>
@@ -263,27 +263,27 @@ export default function StudentPaymentsPage() {
                         {payment.package_name}
                       </h3>
                       <p className="serif-title text-xl mt-1">{formatPrice(payment.amount)}</p>
-                    </div>
+              </div>
                     <div className="text-right">
                       <p className="text-[10px] text-black/30 font-medium mb-2">{formatDate(payment.created_at)}</p>
-                      {getStatusBadge(payment.status)}
-                    </div>
-                  </div>
-                  {payment.status === 'pending' && !payment.proof_path && (
+                        {getStatusBadge(payment.status)}
+                      </div>
+                      </div>
+                      {payment.status === 'pending' && !payment.proof_path && (
                     <button 
                       onClick={() => {
                         setCurrentPaymentId(payment.id)
                         setIsUploadDialogOpen(true)
                       }}
                       className="w-full py-3 bg-[#BFA58E] text-white font-bold text-[10px] tracking-[0.2em] uppercase rounded-2xl hover:bg-[#A68B6F] transition-all flex items-center justify-center gap-2"
-                    >
+                        >
                       <Upload className="h-3 w-3" />
                       Subir Comprobante
                     </button>
-                  )}
-                </div>
+                      )}
+              </div>
               ))
-            )}
+        )}
           </div>
         ) : (
           /* Lista de Paquetes */
@@ -311,8 +311,8 @@ export default function StudentPaymentsPage() {
                     {isPopular && (
                       <div className="absolute top-4 right-6">
                         <span className="bg-[#CEB49D] text-white text-[8px] font-bold tracking-[0.15em] uppercase px-3 py-1 rounded-full">Popular</span>
-                      </div>
-                    )}
+                </div>
+              )}
                     
                     <div className="flex justify-between items-start mb-4">
                       <div>
@@ -321,8 +321,8 @@ export default function StudentPaymentsPage() {
                         </h3>
                         <p className={`serif-title mt-1 ${isPopular ? 'text-4xl' : 'text-3xl'}`}>
                           {formatPrice(pkg.price)}
-                        </p>
-                      </div>
+              </p>
+            </div>
                     </div>
 
                     <ul className="space-y-2 mb-6">
@@ -379,10 +379,10 @@ export default function StudentPaymentsPage() {
               Información de cuenta bancaria y formulario para subir el comprobante de pago.
             </DialogDescription>
             <button 
-              onClick={() => {
-                setIsUploadDialogOpen(false)
-                setSelectedFile(null)
-                setCurrentPaymentId(null)
+                onClick={() => {
+                  setIsUploadDialogOpen(false)
+                  setSelectedFile(null)
+                  setCurrentPaymentId(null)
                 setSelectedPackage(null)
               }}
               className="absolute top-5 right-5 text-black/20 hover:text-black transition-colors"
@@ -470,10 +470,10 @@ export default function StudentPaymentsPage() {
 
             {/* Action */}
             <button 
-              onClick={handleUpload}
+                onClick={handleUpload}
               disabled={uploading || !selectedFile}
               className="w-full py-4 bg-[#BFA58E] text-white font-bold tracking-[0.3em] text-[9px] uppercase shadow-[0_12px_30px_rgba(191,165,142,0.25)] hover:bg-[#A68B6F] hover:shadow-[0_15px_40px_rgba(191,165,142,0.35)] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 rounded-2xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:translate-y-0"
-            >
+              >
               {uploading ? (
                 <>
                   <Loader2 className="h-3 w-3 animate-spin" />

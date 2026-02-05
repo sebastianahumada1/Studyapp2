@@ -26,7 +26,7 @@ type Slot = {
   coach_id: string
   profiles: {
     full_name: string
-  }
+}
 }
 
 export default function StudentBookPage() {
@@ -43,26 +43,26 @@ export default function StudentBookPage() {
   }, [])
 
   const loadSlots = async () => {
-    try {
+      try {
       setLoading(true)
-      const supabase = createClient()
-      
+        const supabase = createClient()
+
       // Cargar slots activos y futuros
       const { data, error } = await supabase
-        .from('coach_slots')
-        .select(`
-          id,
-          starts_at,
-          ends_at,
-          capacity,
+          .from('coach_slots')
+          .select(`
+            id,
+            starts_at,
+            ends_at,
+            capacity,
           active,
           coach_id,
           profiles!coach_slots_coach_id_fkey(full_name),
           class_bookings(count)
-        `)
-        .eq('active', true)
+          `)
+          .eq('active', true)
         .gte('starts_at', new Date().toISOString())
-        .order('starts_at', { ascending: true })
+          .order('starts_at', { ascending: true })
 
       if (error) throw error
 
@@ -72,16 +72,16 @@ export default function StudentBookPage() {
       }))
 
       setSlots(formattedSlots)
-    } catch (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
+      } catch (error) {
+        toast({
+          variant: 'destructive',
+          title: 'Error',
         description: 'No se pudieron cargar las clases disponibles',
-      })
-    } finally {
-      setLoading(false)
+        })
+      } finally {
+        setLoading(false)
+      }
     }
-  }
 
   const handleReserve = async () => {
     if (selectedSlotIds.length === 0) return
@@ -93,8 +93,8 @@ export default function StudentBookPage() {
 
       // Realizar las reservas una por una (o podrías crear una RPC para múltiples)
       for (const slotId of selectedSlotIds) {
-        const result = await reserveSlot(slotId)
-        if (result.success) {
+      const result = await reserveSlot(slotId)
+      if (result.success) {
           successCount++
         } else {
           errors.push(result.error)
@@ -277,8 +277,8 @@ export default function StudentBookPage() {
           <h2 className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#CEB49D]">Clases disponibles</h2>
           <p className="text-[9px] font-bold text-black/20 uppercase">
             {filteredSlots.length} {filteredSlots.length === 1 ? 'opción' : 'opciones'}
-          </p>
-        </div>
+        </p>
+      </div>
 
         {loading ? (
           <div className="flex justify-center py-12">
@@ -362,7 +362,7 @@ export default function StudentBookPage() {
                 .sort((a, b) => new Date(a.starts_at).getTime() - new Date(b.starts_at).getTime())
                 .map((slot) => {
                   const { time, ampm } = formatTime(slot.starts_at)
-                  return (
+            return (
                     <div 
                       key={slot.id}
                       className="bg-white border border-[#0A517F]/10 rounded-full px-3 py-1 flex items-center gap-2 shadow-sm"
@@ -373,12 +373,12 @@ export default function StudentBookPage() {
                       <div className="w-px h-2 bg-[#0A517F]/20" />
                       <span className="text-[9px] font-medium text-black/60">
                         {time} {ampm}
-                      </span>
-                    </div>
-                  )
-                })}
-            </div>
-          </div>
+                            </span>
+                          </div>
+                    )
+                  })}
+                </div>
+              </div>
         )}
         <button
           onClick={handleReserve}
@@ -397,7 +397,7 @@ export default function StudentBookPage() {
             'Confirmar Agendamiento'
           )}
         </button>
-      </div>
+        </div>
     </div>
   )
 }

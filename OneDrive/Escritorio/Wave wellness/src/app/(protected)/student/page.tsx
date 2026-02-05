@@ -180,7 +180,7 @@ export default async function StudentDashboard() {
               <button className="w-10 h-10 flex items-center justify-center text-white bg-[#CEB49D] hover:bg-[#BFA58E] rounded-full transition-all shadow-sm">
                 <Plus className="h-5 w-5" />
               </button>
-            </Link>
+                </Link>
           </div>
         </section>
 
@@ -205,10 +205,10 @@ export default async function StudentDashboard() {
                   <div>
                     <p className="text-[11px] font-medium text-black/40 mb-1">
                       {formatAgendaDate(booking.coach_slots.starts_at)}, {formatTime(booking.coach_slots.starts_at)}
-                    </p>
+                        </p>
                     <p className="text-[9px] uppercase tracking-[0.15em] text-[#CEB49D] font-bold mb-0.5">
                       {booking.coach_slots.profiles?.full_name || 'Coach'}
-                    </p>
+                        </p>
                     <p className="serif-title text-black text-lg italic leading-tight">Pilates Reformer</p>
                   </div>
                   <Link href={`/student/bookings`}>
@@ -219,7 +219,7 @@ export default async function StudentDashboard() {
                 </div>
               ))
             )}
-          </div>
+      </div>
 
           <div className="p-6 pt-0">
             <Link href="/student/bookings">
@@ -234,11 +234,11 @@ export default async function StudentDashboard() {
 
       {/* Fixed Footer CTA */}
       <footer className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-background-light/80 backdrop-blur-xl border-t border-[#CEB49D]/10 px-6 py-8 z-20">
-        <Link href="/student/book">
+              <Link href="/student/book">
           <button className="w-full bg-[#BFA58E] text-white text-[11px] font-bold tracking-[0.3em] uppercase py-5 px-12 rounded-full shadow-[0_15px_40px_rgba(191,165,142,0.3)] border border-white/20 active:scale-95 transition-all hover:bg-[#A68B6F] hover:shadow-[0_20px_50px_rgba(191,165,142,0.4)] hover:-translate-y-1">
             Reservar Nueva Sesión
           </button>
-        </Link>
+              </Link>
         <p className="text-center text-[9px] text-black/20 tracking-[0.2em] uppercase font-bold mt-6">Wave Wellness • Santa Marta</p>
       </footer>
     </div>

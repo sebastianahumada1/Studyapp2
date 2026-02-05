@@ -54,8 +54,8 @@ export default function CoachAvailabilityPage() {
   }, [currentMonth])
 
   const loadDaysWithSlots = async () => {
-    try {
-      const supabase = createClient()
+      try {
+        const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
 
@@ -95,7 +95,7 @@ export default function CoachAvailabilityPage() {
     try {
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
+        if (!user) return
 
       // 1. Obtener el rango de búsqueda en UTC para cubrir todo el día local
       const sortedSelectedDates = [...selectedDates].sort((a, b) => a.getTime() - b.getTime())
@@ -111,13 +111,13 @@ export default function CoachAvailabilityPage() {
       localEnd.setDate(localEnd.getDate() + 1) // Un día después para seguridad
 
       const { data, error } = await supabase
-        .from('coach_slots')
+          .from('coach_slots')
         .select('*')
-        .eq('coach_id', user.id)
+          .eq('coach_id', user.id)
         .gte('starts_at', localStart.toISOString())
         .lte('starts_at', localEnd.toISOString())
-        .order('starts_at', { ascending: true })
-      
+          .order('starts_at', { ascending: true })
+
       if (error) throw error
 
       // Filtrado manual exacto comparando la cadena de texto de la fecha tal cual viene de la DB
@@ -241,13 +241,13 @@ export default function CoachAvailabilityPage() {
 
   const handleSave = async () => {
     if (selectedDates.length === 0 || activeHours.length === 0) {
-      toast({
-        variant: 'destructive',
+          toast({
+            variant: 'destructive',
         title: 'Selección incompleta',
         description: 'Debes seleccionar al menos un día y una hora.',
-      })
-      return
-    }
+          })
+          return
+        }
 
     try {
       setLoading(true)
@@ -279,15 +279,15 @@ export default function CoachAvailabilityPage() {
         throw new Error(result.error)
       }
     } catch (error: any) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
+        toast({
+          variant: 'destructive',
+          title: 'Error',
         description: error.message,
-      })
-    } finally {
-      setLoading(false)
+        })
+      } finally {
+        setLoading(false)
+      }
     }
-  }
 
   const handlePrevMonth = () => {
     const newMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1)
@@ -330,8 +330,8 @@ export default function CoachAvailabilityPage() {
               <button onClick={handlePrevMonth}><ChevronLeft className="h-5 w-5 opacity-40" /></button>
               <button onClick={handleNextMonth}><ChevronRight className="h-5 w-5" /></button>
             </div>
-          </div>
-          
+      </div>
+
           <div className="grid grid-cols-7 gap-y-3 text-center mb-4">
             {['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do'].map(day => (
               <span key={day} className="text-[9px] font-bold text-[#CEB49D] uppercase">{day}</span>
@@ -343,7 +343,7 @@ export default function CoachAvailabilityPage() {
               
               const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
               const hasSlots = daysWithSlots.includes(dateStr)
-              
+
               return (
                 <button 
                   key={date.toISOString()}
@@ -395,16 +395,16 @@ export default function CoachAvailabilityPage() {
                   </div>
                   <div className="flex items-center gap-1">
                     <button 
-                      onClick={() => {
+                        onClick={() => {
                         const d = new Date(slot.starts_at)
                         const h = String(d.getHours()).padStart(2, '0')
                         const m = String(d.getMinutes()).padStart(2, '0')
                         setEditHour(`${h}:${m}`)
                         setEditingSlot(slot)
                         setIsEditHourOpen(true)
-                      }}
+                        }}
                       className="p-2 text-[#0A517F]/40 hover:text-[#0A517F] transition-colors"
-                    >
+                      >
                       <Edit3 className="h-4 w-4" />
                     </button>
                     <button 
@@ -452,11 +452,11 @@ export default function CoachAvailabilityPage() {
                     {isActive && (
                       <div className="w-6 h-6 rounded-full bg-[#0A517F] flex items-center justify-center text-white shadow-sm shadow-[#0A517F]/20 animate-in zoom-in duration-200">
                         <Check className="h-4 w-4 font-bold" />
-                      </div>
-                    )}
+                    </div>
+                  )}
                   </div>
-                )
-              })}
+              )
+            })}
             </div>
           )}
 

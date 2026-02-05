@@ -89,9 +89,9 @@ export default function AdminPaymentsPage() {
       if (error) throw error
       setPayments((data as any) || [])
     } catch (error: any) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
+        toast({
+          variant: 'destructive',
+          title: 'Error',
         description: 'No se pudieron cargar los pagos',
       })
     } finally {
@@ -122,7 +122,7 @@ export default function AdminPaymentsPage() {
       const result = await rejectPayment(id) as any
       if (result.success) {
         toast({ title: 'Pago rechazado', description: 'El estado del pago ha sido actualizado.' })
-        loadPayments()
+      loadPayments()
       } else {
         throw new Error(result.error)
       }
@@ -199,7 +199,7 @@ export default function AdminPaymentsPage() {
             <p className="text-[9px] font-bold tracking-widest uppercase opacity-40">Hoy</p>
             <p className="text-xl serif-title text-[#0A517F] italic">{formatPrice(todayTotal)}</p>
           </div>
-        </div>
+      </div>
 
         {/* Search Bar */}
         <div className="relative group">
@@ -225,7 +225,7 @@ export default function AdminPaymentsPage() {
 
         {/* Payments List */}
         <div className="space-y-4">
-          {loading ? (
+      {loading ? (
             <div className="flex justify-center py-20">
               <Loader2 className="h-8 w-8 animate-spin text-[#CEB49D]" />
             </div>
@@ -234,7 +234,7 @@ export default function AdminPaymentsPage() {
               <p className="serif-title text-xl text-black/40 italic">
                 {searchQuery ? 'No se encontraron resultados' : 'No hay pagos registrados'}
               </p>
-            </div>
+                          </div>
           ) : (
             filteredPayments.map((payment) => (
               <div 
@@ -252,7 +252,7 @@ export default function AdminPaymentsPage() {
                   )}>
                     <div className="flex flex-col items-center animate-in zoom-in duration-300">
                       {payment.status === 'approved' ? (
-                        <>
+                            <>
                           <Verified className="h-10 w-10 text-green-600" />
                           <p className="text-[9px] font-bold tracking-[0.2em] text-green-600 uppercase mt-2">
                             Aprobado +{payment.package_credits || 0} Créditos
@@ -262,10 +262,10 @@ export default function AdminPaymentsPage() {
                         <>
                           <XCircle className="h-10 w-10 text-red-500" />
                           <p className="text-[9px] font-bold tracking-[0.2em] text-red-500 uppercase mt-2">Rechazado</p>
-                        </>
-                      )}
-                    </div>
-                  </div>
+                            </>
+                          )}
+                        </div>
+            </div>
                 )}
 
                 <div className="flex items-start justify-between mb-4">
@@ -280,7 +280,7 @@ export default function AdminPaymentsPage() {
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-[#CEB49D]/10 text-[#CEB49D]">
                           <User className="h-6 w-6" />
-                        </div>
+                    </div>
                       )}
                     </div>
                     <div>
@@ -292,7 +292,7 @@ export default function AdminPaymentsPage() {
                     <p className="text-[#0A517F] serif-title text-xl italic">{formatPrice(payment.amount)}</p>
                     <p className="text-[9px] opacity-40 font-bold uppercase">{formatTime(payment.created_at)}</p>
                   </div>
-                </div>
+                    </div>
 
                 {/* Proof Preview */}
                 {payment.proof_path && payment.status === 'pending' ? (
@@ -329,10 +329,10 @@ export default function AdminPaymentsPage() {
                     <ImageIcon className="h-6 w-6 text-black/20" />
                     <p className="text-[10px] font-bold text-black/20 uppercase tracking-widest">Sin comprobante</p>
                   </div>
-                )}
+                      )}
 
                 {/* Actions */}
-                {payment.status === 'pending' && (
+                      {payment.status === 'pending' && (
                   <div className="grid grid-cols-2 gap-3">
                     <button 
                       onClick={() => handleReject(payment.id)}
@@ -351,13 +351,13 @@ export default function AdminPaymentsPage() {
                       ) : (
                         <>
                           <CheckCircle2 className="h-4 w-4" />
-                          Aprobar
+                            Aprobar
                         </>
                       )}
                     </button>
-                  </div>
+                    </div>
                 )}
-              </div>
+            </div>
             ))
           )}
         </div>
@@ -381,10 +381,10 @@ export default function AdminPaymentsPage() {
             <div className="mt-8 text-center text-white">
               <h4 className="serif-title text-2xl italic">Comprobante {selectedProof.name}</h4>
               <p className="text-[10px] tracking-[0.2em] uppercase opacity-40 font-bold mt-2">Verificación de Pago</p>
-            </div>
-          </div>
-        </div>
-      )}
+                  </div>
+                    </div>
+                  </div>
+                )}
     </div>
   )
 }

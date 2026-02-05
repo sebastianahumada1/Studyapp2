@@ -17,8 +17,8 @@ import Link from 'next/link'
 import { cn } from '@/lib/utils'
 
 type Booking = {
-  id: string
-  status: 'booked' | 'cancelled' | 'attended' | 'no_show'
+    id: string
+    status: 'booked' | 'cancelled' | 'attended' | 'no_show'
   student_id: string
   slot_id: string
   student: {
@@ -80,7 +80,7 @@ export default function AdminClassesPage() {
       })
     } finally {
       setLoading(false)
-    }
+      }
   }
 
   const formatTime = (dateString: string) => {
@@ -189,7 +189,7 @@ export default function AdminClassesPage() {
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#CEB49D]/80">Alumnas Agendadas</h2>
           <p className="text-[9px] font-bold text-[#0A517F]/40 uppercase">Total: {bookings.length} Reservas</p>
-        </div>
+      </div>
 
         {loading ? (
           <div className="flex justify-center py-12">

@@ -9,11 +9,11 @@ export function ImageCarousel() {
   const images = [
     "/images/Galeria/1.jpeg",
     "/images/Galeria/2.jpeg",
-    "/images/Galeria/3.jpeg",
+    //"/images/Galeria/3.jpeg",
     "/images/Galeria/4.jpeg",
     "/images/Galeria/5.jpeg",
     "/images/Galeria/6.jpeg",
-    "/images/Galeria/7.jpeg",
+    //"/images/Galeria/7.jpeg",
     "/images/Galeria/8.jpeg",
   ]
 

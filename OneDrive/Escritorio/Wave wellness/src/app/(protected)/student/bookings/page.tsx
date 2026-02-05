@@ -22,11 +22,11 @@ type Booking = {
   status: 'booked' | 'cancelled' | 'attended' | 'no_show'
   created_at: string
   coach_slots: {
-    starts_at: string
-    ends_at: string
-    profiles: {
+  starts_at: string
+  ends_at: string
+    profiles?: {
       full_name: string
-    }
+    } | null
   }
 }
 
@@ -50,21 +50,30 @@ export default function StudentBookingsPage() {
 
       const { data, error } = await supabase
         .from('class_bookings')
-        .select(`
-          id,
+      .select(`
+        id,
           status,
           created_at,
           coach_slots!inner(
-            starts_at,
-            ends_at,
-            profiles!coach_slots_coach_id_fkey(full_name)
-          )
-        `)
+        starts_at,
+        ends_at,
+            profiles:coach_id(full_name)
+        )
+      `)
         .eq('student_id', user.id)
         .order('coach_slots(starts_at)', { ascending: activeTab === 'upcoming' })
 
       if (error) throw error
-      setBookings(data || [])
+      
+      // Mapear los datos para asegurar que coach_slots sea un objeto único
+      const mappedBookings = (data || []).map((booking: any) => ({
+        id: booking.id,
+        status: booking.status,
+        created_at: booking.created_at,
+        coach_slots: Array.isArray(booking.coach_slots) ? booking.coach_slots[0] : booking.coach_slots
+      }))
+      
+      setBookings(mappedBookings)
     } catch (error) {
       toast({
         variant: 'destructive',
@@ -112,8 +121,8 @@ export default function StudentBookingsPage() {
       return slotDate >= now && b.status === 'booked'
     } else {
       return slotDate < now || b.status !== 'booked'
-    }
-  })
+      }
+    })
 
   const formatBookingDate = (dateString: string) => {
     const date = new Date(dateString)

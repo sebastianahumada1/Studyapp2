@@ -173,7 +173,7 @@ export default function AdminDashboardPage() {
           </div>
           <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-2 border-white rounded-full"></div>
         </div>
-        <div>
+      <div>
           <h1 className="text-[#0A517F] serif-title text-3xl font-normal tracking-tight italic leading-none">Panel Admin</h1>
           <p className="text-[10px] font-bold tracking-[0.1em] text-[#CEB49D] uppercase mt-1">Gestión de Estudio</p>
         </div>
@@ -221,7 +221,7 @@ export default function AdminDashboardPage() {
           <div className="flex items-center justify-between">
             <h3 className="serif-title text-[#0A517F] text-xl font-medium italic">Agenda del Día</h3>
             <span className="text-[10px] bg-[#D0E1F5] text-[#0A517F] px-2 py-1 rounded-full font-bold uppercase tracking-wider">Próxima</span>
-          </div>
+      </div>
 
           <div className="space-y-4">
             {nextSession ? (
@@ -261,12 +261,12 @@ export default function AdminDashboardPage() {
                   <p className="text-[11px] text-[#6D4E38]/60">Pagos por revisar</p>
                 </div>
               </div>
-              <Link href="/admin/payments">
+            <Link href="/admin/payments">
                 <button className="w-full py-4 bg-[#BFA58E] text-white text-[11px] font-bold uppercase tracking-widest rounded-xl shadow-lg shadow-[#BFA58E]/20 hover:bg-[#A68B6F] active:scale-[0.98] transition-all">
                   Resolver ahora
                 </button>
-              </Link>
-            </div>
+            </Link>
+      </div>
           </div>
         </section>
       </main>

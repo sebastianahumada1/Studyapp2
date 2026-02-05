@@ -132,7 +132,7 @@ export default function CoachDashboard() {
               <Settings className="h-5 w-5" />
             </button>
           </Link>
-        </div>
+      </div>
 
         <div className="mb-4">
           <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-sm bg-white flex items-center justify-center">
@@ -244,8 +244,8 @@ export default function CoachDashboard() {
             <div className="w-12 h-12 rounded-2xl bg-[#D0E1F5]/20 flex items-center justify-center">
               <TrendingUp className="h-6 w-6 text-[#0A517F]" />
             </div>
-          </div>
-          
+      </div>
+
           <p className="text-[13px] text-[#6D4E38]/80 leading-relaxed mb-6 italic font-medium">
             Mantén tus horarios actualizados para que las alumnas puedan agendar sus sesiones de Pilates.
           </p>
