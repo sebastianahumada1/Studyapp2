@@ -1,6 +1,6 @@
 export function ScheduleSection() {
   return (
-    <section className="px-6 mb-32 max-w-screen-sm mx-auto">
+    <section id="horarios" className="px-6 mb-32 max-w-screen-sm mx-auto scroll-mt-32">
       <div className="text-center mb-12">
         <span className="text-black/40 text-[10px] tracking-[0.4em] uppercase font-bold mb-4 block">Disponibilidad</span>
         <h3 className="serif-title text-3xl md:text-4xl text-black italic mb-2">Pilates Reformer</h3>

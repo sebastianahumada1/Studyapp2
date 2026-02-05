@@ -55,7 +55,7 @@ export function CommunitySection() {
   }
 
   return (
-    <section className="mb-32 px-6">
+    <section id="comunidad" className="mb-32 px-6 scroll-mt-32">
       <div className="bg-gradient-to-br from-white via-[#FDFCFB] to-[#F5F3F0] border border-white/80 rounded-[50px] pt-20 pb-12 text-center relative overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
         {/* Decorative elements */}
         <div className="absolute -top-24 -left-24 w-80 h-80 bg-skyblue/30 rounded-full blur-[100px] opacity-60"></div>

@@ -34,7 +34,7 @@ export function RulesSection() {
   ]
 
   return (
-    <section className="px-8 mb-32 max-w-md mx-auto text-center">
+    <section id="reglas" className="px-8 mb-32 max-w-md mx-auto text-center scroll-mt-32">
       <div className="mb-12">
         <h3 className="serif-title text-4xl text-black/80 uppercase tracking-[0.1em] mb-6">Reglamento</h3>
         <div className="flex flex-col items-center gap-2 mb-8">

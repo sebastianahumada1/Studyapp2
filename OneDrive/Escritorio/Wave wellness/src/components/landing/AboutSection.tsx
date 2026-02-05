@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 export function AboutSection() {
   return (
-    <section className="px-6 mb-32 max-w-screen-sm mx-auto text-center">
+    <section id="nosotros" className="px-6 mb-32 max-w-screen-sm mx-auto text-center scroll-mt-32">
       <div className="flex justify-center mb-10">
         <Image 
           src="/images/wave-logo-isotipo.png" 

@@ -12,7 +12,7 @@ export function PriceList() {
   ]
 
   return (
-    <section className="px-8 mb-32 max-w-md mx-auto">
+    <section id="precios" className="px-8 mb-32 max-w-md mx-auto scroll-mt-32">
       <div className="text-center mb-16">
         <span className="text-black/40 text-[10px] tracking-[0.4em] uppercase font-bold mb-4 block">Inversión</span>
         <h3 className="serif-title text-3xl text-black italic mb-2">Price List</h3>
@@ -32,7 +32,7 @@ export function PriceList() {
               <div className="flex justify-between items-end mb-2">
                 <span className="text-[10px] font-medium text-black/70 uppercase tracking-[0.2em] group-hover:text-black transition-colors">
                   {plan.name}
-                  {plan.popular && (
+            {plan.popular && (
                     <span className="ml-2 text-[8px] bg-ocean-blue/10 text-ocean-blue px-2 py-0.5 rounded-full font-bold tracking-tighter">POPULAR</span>
                   )}
                 </span>
@@ -65,8 +65,8 @@ export function PriceList() {
                 </span>
               </div>
               <div className="w-full h-px border-b border-dashed border-black/10"></div>
-            </div>
-          ))}
+          </div>
+        ))}
         </div>
       </div>
 
