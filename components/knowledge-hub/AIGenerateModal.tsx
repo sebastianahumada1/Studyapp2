@@ -17,8 +17,47 @@ export function AIGenerateModal({ onClose }: AIGenerateModalProps) {
   const [level, setLevel] = useState<StudyLevel>('intermedio');
   const [weeklyHours, setWeeklyHours] = useState(5);
   const [loading, setLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState(0);
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
+
+  const loadingSteps = [
+    { label: 'Analizando objetivo y temas...', icon: 'search' },
+    { label: 'Diseñando la estructura curricular...', icon: 'account_tree' },
+    { label: 'Generando contenido educativo...', icon: 'edit_note' },
+    { label: 'Revisando progresión de aprendizaje...', icon: 'fact_check' },
+    { label: 'Guardando en tu biblioteca...', icon: 'save' },
+  ];
+
+  useEffect(() => {
+    if (!loading) {
+      setLoadingStep(0);
+      setLoadingProgress(0);
+      return;
+    }
+
+    const totalMs = 18000;
+    const stepMs = totalMs / loadingSteps.length;
+    let step = 0;
+    let progress = 0;
+
+    const progressTimer = setInterval(() => {
+      progress += 1;
+      setLoadingProgress(Math.min(progress, 95));
+    }, totalMs / 95);
+
+    const stepTimer = setInterval(() => {
+      step += 1;
+      if (step < loadingSteps.length) setLoadingStep(step);
+    }, stepMs);
+
+    return () => {
+      clearInterval(progressTimer);
+      clearInterval(stepTimer);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading]);
   const router = useRouter();
 
   useEffect(() => {
@@ -154,11 +193,52 @@ export function AIGenerateModal({ onClose }: AIGenerateModalProps) {
 
         <div className="relative z-10">
           <button
-            onClick={onClose}
-            className="absolute top-0 right-0 text-text-secondary hover:text-white transition-colors z-20 p-2 rounded-lg hover:bg-white/5"
+            onClick={loading ? undefined : onClose}
+            disabled={loading}
+            className="absolute top-0 right-0 text-text-secondary hover:text-white transition-colors z-20 p-2 rounded-lg hover:bg-white/5 disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <span className="material-symbols-outlined text-2xl">close</span>
           </button>
+
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-12 px-4 text-center min-h-[340px]">
+              <div className="relative mb-8">
+                <div className="size-20 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-accent/20 flex items-center justify-center border border-accent/30">
+                  <span className="material-symbols-outlined text-[40px] text-accent" style={{ animation: 'spin 2s linear infinite' }}>auto_awesome</span>
+                </div>
+                <div className="absolute -inset-3 rounded-2xl border border-accent/20 animate-ping" />
+              </div>
+
+              <h3 className="text-white text-xl font-bold mb-1">Generando tu ruta de estudio</h3>
+              <p className="text-slate-400 text-sm mb-6">{loadingSteps[loadingStep]?.label}</p>
+
+              <div className="w-full max-w-sm mb-2">
+                <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-500"
+                    style={{ width: `${loadingProgress}%` }}
+                  />
+                </div>
+              </div>
+              <p className="text-slate-600 text-xs mb-8">{loadingProgress}% — puede tomar entre 15 y 25 segundos</p>
+
+              <div className="flex flex-col gap-2.5 text-left w-full max-w-xs">
+                {loadingSteps.map((step, index) => (
+                  <div key={index} className={`flex items-center gap-3 text-sm transition-colors ${index <= loadingStep ? 'text-slate-300' : 'text-slate-600'}`}>
+                    {index < loadingStep ? (
+                      <span className="material-symbols-outlined text-emerald-400 text-base flex-shrink-0">check_circle</span>
+                    ) : index === loadingStep ? (
+                      <span className="material-symbols-outlined text-accent text-base flex-shrink-0" style={{ animation: 'spin 1.2s linear infinite' }}>progress_activity</span>
+                    ) : (
+                      <span className="size-4 rounded-full border border-slate-700 flex-shrink-0 inline-block" />
+                    )}
+                    {step.label}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+          <>
           <div className="flex items-start gap-4 mb-6 pr-10">
             <div className="size-14 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-accent/20 flex items-center justify-center text-accent border border-indigo-500/20 shadow-[0_0_20px_rgba(6,182,212,0.15)] flex-shrink-0">
               <span className="material-symbols-outlined text-[32px]">auto_awesome</span>
@@ -330,6 +410,8 @@ export function AIGenerateModal({ onClose }: AIGenerateModalProps) {
               </button>
             </div>
           </form>
+          </>
+          )}
         </div>
       </div>
     </div>,
