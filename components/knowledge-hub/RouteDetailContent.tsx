@@ -109,7 +109,7 @@ export function RouteDetailContent({ routeId }: RouteDetailContentProps) {
       </header>
 
       {/* Content Layout */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden min-h-0">
         <div className="max-w-[1400px] mx-auto w-full flex h-full">
           {/* Tree Navigator Sidebar */}
           <RouteTreeNavigator
