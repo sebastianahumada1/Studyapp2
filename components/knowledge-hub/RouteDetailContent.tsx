@@ -57,7 +57,7 @@ export function RouteDetailContent({ routeId }: RouteDetailContentProps) {
   const clampedProgress = Math.min(100, Math.max(0, progress));
 
   return (
-    <div className="flex-1 flex flex-col min-w-0 bg-background-light dark:bg-background-dark overflow-hidden relative">
+    <div className="h-full flex flex-col min-w-0 bg-background-light dark:bg-background-dark overflow-hidden relative">
       {/* Header */}
       <header 
         className="w-full flex-shrink-0 z-10"
