@@ -1,23 +1,19 @@
 'use client';
 
+import { Suspense } from 'react';
 import { Header } from '@/components/Header';
 import { signUp, signIn } from '@/app/actions/auth';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 function LoginFormContent() {
-  const [isSignUp, setIsSignUp] = useState(true);
-  
+  const searchParams = useSearchParams();
+  const mode = searchParams.get('mode');
+  const [isSignUp, setIsSignUp] = useState(mode !== 'signin');
+
   useEffect(() => {
-    // Si viene con el parámetro ?mode=signin, mostrar inicio de sesión
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const mode = params.get('mode');
-      if (mode === 'signin') {
-        setIsSignUp(false);
-      }
-    }
-  }, []);
+    setIsSignUp(mode !== 'signin');
+  }, [mode]);
   
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -321,7 +317,9 @@ export default function LoginPage() {
           <div className="absolute top-[40%] -right-[10%] w-[40%] h-[40%] bg-purple-600/10 rounded-full blur-[100px]"></div>
         </div>
 
-        <LoginFormContent />
+        <Suspense fallback={null}>
+          <LoginFormContent />
+        </Suspense>
       </main>
     </div>
   );
