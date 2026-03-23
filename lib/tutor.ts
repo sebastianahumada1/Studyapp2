@@ -88,6 +88,7 @@ export function detectCompletion(text: string): boolean {
  */
 export function extractAnchorRecommendation(text: string): string | null {
   const anchorPatterns = [
+    /💡\s*Anclaje:\s*(.+?)(?:\n|$)/i,
     /anclaje[:\s]+(.+?)(?:\.|$)/i,
     /recomend[ao].*?anclaje[:\s]+(.+?)(?:\.|$)/i,
     /suger[eo].*?memoria[:\s]+(.+?)(?:\.|$)/i,

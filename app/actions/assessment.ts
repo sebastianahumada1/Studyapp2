@@ -278,12 +278,16 @@ export async function generateFeynmanFeedback(
     return { success: false, error: 'El método Feynman no está habilitado para esta sesión' };
   }
 
-  // Get all answers with questions and feynman reasoning
+  // Get all answers with questions (including route/topic for subject context)
   const { data: answers, error: answersError } = await supabase
     .from('assessment_answers')
     .select(`
       *,
-      question:questions(*)
+      question:questions(
+        *,
+        route:study_routes(id, title),
+        topic:study_topics(id, name)
+      )
     `)
     .eq('session_id', sessionId)
     .order('question_order', { ascending: true });
@@ -292,65 +296,71 @@ export async function generateFeynmanFeedback(
     return { success: false, error: 'Error al obtener respuestas' };
   }
 
-  // Generate feedback for each answer that has feynman reasoning
+  // Only process answers that have feynman reasoning
+  const answersWithReasoning = answers.filter(
+    (a) => a.feynman_reasoning && a.feynman_reasoning.trim() !== ''
+  );
+
+  // Process all answers in parallel for faster response
   const feedbackResults: Array<{ answer_id: string; feedback: string }> = [];
 
-  for (const answer of answers) {
-    if (!answer.feynman_reasoning || answer.feynman_reasoning.trim() === '') {
-      continue;
-    }
-
+  const feedbackPromises = answersWithReasoning.map(async (answer) => {
     const question = answer.question as {
       question_text: string;
       options: Array<{ text: string }> | string;
       correct_answer_index: number;
+      route?: { id: string; title: string } | null;
+      topic?: { id: string; name: string } | null;
     };
-    let options = question.options;
-    if (typeof options === 'string') {
-      try {
-        options = JSON.parse(options);
-      } catch {
-        options = [];
-      }
-    }
-    if (!Array.isArray(options)) {
-      options = [];
+
+    let options: Array<{ text: string }> = [];
+    const rawOptions = question.options;
+    if (typeof rawOptions === 'string') {
+      try { options = JSON.parse(rawOptions); } catch { options = []; }
+    } else if (Array.isArray(rawOptions)) {
+      options = rawOptions;
     }
 
     const correctAnswer = options[question.correct_answer_index]?.text || '';
-    const selectedAnswer = options[answer.selected_answer_index]?.text || '';
+    const selectedAnswer = options[answer.selected_answer_index ?? -1]?.text || '';
 
-    const systemPrompt = `Eres un experto tutor de medicina que utiliza técnicas avanzadas de estudio para evaluar el razonamiento de estudiantes.
+    // Build dynamic subject context from route/topic
+    const route = Array.isArray(question.route) ? question.route[0] : question.route;
+    const topic = Array.isArray(question.topic) ? question.topic[0] : question.topic;
+    const subjectContext = [route?.title, topic?.name].filter(Boolean).join(' › ') || 'la materia estudiada';
 
-Tu tarea es evaluar el razonamiento de un estudiante usando DOS técnicas específicas y proporcionar feedback estructurado.
+    const systemPrompt = `Eres un tutor experto en ${subjectContext} que evalúa el razonamiento de estudiantes usando el Método Feynman.
 
-IMPORTANTE: Debes responder SOLO con un JSON válido en este formato exacto:
+Tu tarea es analizar si el estudiante realmente comprende el concepto o solo memoriza, usando DOS lentes de análisis complementarios.
+
+Responde EXCLUSIVAMENTE con JSON válido en este formato:
 {
-  "tecnica1": "Texto del análisis usando la Técnica 1: El Descarte de Primeros Principios. Analiza si el estudiante consideró primero qué opciones son seguras y cuáles podrían ser peligrosas, si el razonamiento sigue un proceso lógico desde principios fundamentales, y si descartó opciones incorrectas basándose en principios básicos. (3-5 oraciones)",
-  "tecnica2": "Texto del análisis usando la Técnica 2: Reverse Engineering del Error. Parte del fallo o la discrepancia, desarma la pregunta para encontrar la 'trampa', analiza qué información clave podría haber sido pasada por alto, e identifica el punto específico donde el razonamiento se desvió. (3-5 oraciones)",
-  "resumen": "Resumen y recomendaciones finales. Concluye sobre la calidad del razonamiento y proporciona recomendaciones específicas para mejorar. (3-5 oraciones)"
+  "tecnica1": "Análisis con el lente 'Primeros Principios': ¿El razonamiento parte de conceptos fundamentales correctos? ¿El estudiante descartó opciones con lógica sólida o adivinó? Sé específico citando el razonamiento del estudiante. (3-4 oraciones)",
+  "tecnica2": "Análisis con el lente 'Ingeniería Inversa del Error': ¿Dónde exactamente se desvió el razonamiento? ¿Qué dato clave ignoró o malinterpretó? ¿Cuál es la trampa conceptual de esta pregunta? Si la respuesta fue correcta, valida qué hizo bien. (3-4 oraciones)",
+  "resumen": "Diagnóstico final y acción concreta: ¿El razonamiento refleja comprensión real o aprendizaje superficial? Da UNA recomendación específica de estudio para reforzar el punto débil identificado. (2-3 oraciones)"
 }
 
-REGLAS:
-- Si la respuesta es CORRECTA: Usa la Técnica 1 para validar que el razonamiento siguió principios sólidos. En Técnica 2, explica qué hizo bien el estudiante.
-- Si la respuesta es INCORRECTA: Usa ambas técnicas para identificar dónde falló el razonamiento.
-- Sé específico y educativo en tu feedback
-- Usa terminología médica apropiada
-- Responde SOLO con JSON válido, sin markdown, sin explicaciones adicionales`;
+REGLAS CRÍTICAS:
+- Cita fragmentos del razonamiento del estudiante para hacer el feedback concreto.
+- Si la respuesta es CORRECTA pero el razonamiento es débil o por eliminación ciega, señálalo.
+- Si es INCORRECTA, identifica el error conceptual exacto, no solo que "falló".
+- Usa terminología precisa del área: ${subjectContext}.
+- Responde SOLO con JSON. Sin markdown, sin texto adicional.`;
 
-    const userPrompt = `Pregunta: ${question.question_text}
+    const userPrompt = `Contexto: ${subjectContext}
+
+Pregunta: ${question.question_text}
 
 Opciones:
-${options.map((opt: any, idx: number) => `${String.fromCharCode(65 + idx)}. ${opt.text}${idx === question.correct_answer_index ? ' (CORRECTA)' : ''}`).join('\n')}
+${options.map((opt, idx) => `${String.fromCharCode(65 + idx)}. ${opt.text}${idx === question.correct_answer_index ? ' ✓ (CORRECTA)' : ''}`).join('\n')}
 
-Respuesta seleccionada por el estudiante: ${selectedAnswer}
+Respuesta del estudiante: ${selectedAnswer} → ${answer.is_correct ? 'CORRECTA ✓' : 'INCORRECTA ✗'}
 Respuesta correcta: ${correctAnswer}
-¿Es correcta?: ${answer.is_correct ? 'Sí' : 'No'}
 
-Razonamiento del estudiante (Método Feynman):
-${answer.feynman_reasoning}
+Razonamiento escrito por el estudiante (Método Feynman):
+"${answer.feynman_reasoning}"
 
-Evalúa el razonamiento del estudiante usando las técnicas especificadas y proporciona feedback educativo.`;
+Evalúa la calidad y solidez de este razonamiento.`;
 
     try {
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -365,51 +375,45 @@ Evalúa el razonamiento del estudiante usando las técnicas especificadas y prop
             { role: 'system', content: systemPrompt },
             { role: 'user', content: userPrompt },
           ],
-          temperature: 0.7,
+          temperature: 0.5,
           response_format: { type: 'json_object' },
         }),
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        console.error('OpenAI error:', error);
-        continue;
+        return null;
       }
 
       const data = await response.json();
-      const feedbackContent = data.choices[0]?.message?.content || 'No se pudo generar feedback';
+      const feedbackContent = data.choices[0]?.message?.content;
+      if (!feedbackContent) return null;
 
-      // Try to parse as JSON, if it fails, use as plain text
-      let feedback: any;
+      let feedback: { tecnica1: string; tecnica2: string; resumen: string };
       try {
         feedback = JSON.parse(feedbackContent);
       } catch {
-        // If not JSON, create a structured object from plain text
-        feedback = {
-          tecnica1: feedbackContent,
-          tecnica2: '',
-          resumen: '',
-        };
+        feedback = { tecnica1: feedbackContent, tecnica2: '', resumen: '' };
       }
 
-      // Store as JSON string in database
       const feedbackJson = JSON.stringify(feedback);
 
-      // Update answer with feedback
       await supabase
         .from('assessment_answers')
         .update({ feynman_feedback: feedbackJson })
         .eq('id', answer.id);
 
-      feedbackResults.push({
-        answer_id: answer.id,
-        feedback: feedbackJson,
-      });
-    } catch (error) {
-      console.error('Error generating feedback:', error);
-      continue;
+      return { answer_id: answer.id, feedback: feedbackJson };
+    } catch {
+      return null;
     }
-  }
+  });
+
+  const results = await Promise.allSettled(feedbackPromises);
+  results.forEach((result) => {
+    if (result.status === 'fulfilled' && result.value !== null) {
+      feedbackResults.push(result.value);
+    }
+  });
 
   // Mark session as completed
   await supabase

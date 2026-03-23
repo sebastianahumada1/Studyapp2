@@ -265,15 +265,36 @@ REGLAS DE ORO:
 - BREVEDAD EFICIENTE: Respuestas densas en valor pero cortas en extensión (máximo 4 oraciones por bloque).
 - EQUILIBRIO: 50% Teoría (fundamento) - 50% Práctica (aplicación/ejercicio).
 - CIERRE ACTIVO: Termina cada mensaje con una pregunta o un pequeño reto.
+
+ANCLAJE DE MEMORIA:
+Cuando el estudiante haya demostrado comprensión real de un concepto, incluye al final del mensaje un anclaje mnémico con este formato exacto:
+"💡 Anclaje: [frase corta, memorable y concreta que capture la esencia del concepto]"
+Solo usa el anclaje cuando sea genuinamente útil (máximo 1 por sesión).
+
+CIERRE DE SESIÓN:
+Cuando el objetivo de la sesión esté cumplido (el estudiante ha demostrado comprensión sólida mediante sus respuestas), incluye la frase exacta: "has comprendido el concepto" en tu mensaje de cierre.
 `;
+
+    // Add initial message instructions if this is the opening of the session
+    if (isInitialMessage) {
+      systemPrompt += `
+INSTRUCCIÓN DE APERTURA (PRIMER MENSAJE):
+Este es el inicio de la sesión. Tu primer mensaje debe:
+1. Presentarte brevemente en una sola oración (quién eres en el contexto de esta sesión).
+2. Reformular el objetivo de la sesión en tus propias palabras para confirmar el enfoque.
+3. Lanzar UNA pregunta diagnóstica abierta para evaluar el punto de partida del estudiante.
+NO des teoría todavía. Primero escucha al estudiante.
+`;
+    }
 
     // Prepare messages for OpenAI
     const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
       { role: 'system', content: systemPrompt },
     ];
 
-    // Add conversation history
-    conversationHistory.forEach((msg) => {
+    // Truncate conversation history to last 20 messages to avoid context overflow
+    const truncatedHistory = conversationHistory.slice(-20);
+    truncatedHistory.forEach((msg) => {
       messages.push({
         role: msg.role === 'user' ? 'user' : 'assistant',
         content: msg.content,
@@ -293,10 +314,10 @@ REGLAS DE ORO:
       body: JSON.stringify({
         model: 'gpt-4o-mini',
         messages,
-        temperature: 0.4,
-        max_tokens: 800,
+        temperature: 0.3,
+        max_tokens: 1000,
         presence_penalty: 0.1,
-        frequency_penalty: 0.1,
+        frequency_penalty: 0.2,
         stream: false,
       }),
     });
