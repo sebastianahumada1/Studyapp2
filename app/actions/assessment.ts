@@ -7,9 +7,16 @@ import type {
   SubmitAnswerRequest,
   AssessmentSession,
   AssessmentAnswer,
+  AssessmentAnswerWithQuestion,
   GenerateSessionQuestionsRequest,
 } from '@/types/assessment';
-import type { QuestionWithHierarchy } from '@/types/questions';
+import type { QuestionWithHierarchy, QuestionOption } from '@/types/questions';
+
+interface AssessmentResults {
+  session: AssessmentSession;
+  answers: AssessmentAnswerWithQuestion[];
+  stats: { total: number; correct: number; precision: number };
+}
 
 // Create Assessment Session
 export async function createAssessmentSession(
@@ -136,33 +143,44 @@ export async function generateSessionQuestions(
   }
 
   // Parse options for each question
-  const parsedQuestions: QuestionWithHierarchy[] = questions.map((q: any) => {
-    let options = q.options;
-    if (typeof options === 'string') {
+  const parsedQuestions: QuestionWithHierarchy[] = questions.map((q) => {
+    const rawOptions = q.options as QuestionOption[] | string | null;
+    let options: QuestionOption[] = [];
+    if (typeof rawOptions === 'string') {
       try {
-        options = JSON.parse(options);
+        options = JSON.parse(rawOptions);
       } catch {
         options = [];
       }
+    } else if (Array.isArray(rawOptions)) {
+      options = rawOptions;
     }
-    if (!Array.isArray(options)) {
-      options = [];
-    }
+
+    const raw = q as typeof q & {
+      route: { id: string; title: string } | null;
+      topic: { id: string; name: string } | null;
+      subtopic: { id: string; name: string } | null;
+      subsubtopic: { id: string; name: string } | null;
+    };
 
     return {
       ...q,
       options,
-      route: q.route ? { id: q.route.id, title: q.route.title } : undefined,
-      topic: q.topic ? { id: q.topic.id, name: q.topic.name } : undefined,
-      subtopic: q.subtopic ? { id: q.subtopic.id, name: q.subtopic.name } : undefined,
-      subsubtopic: q.subsubtopic ? { id: q.subsubtopic.id, name: q.subsubtopic.name } : undefined,
+      route: raw.route ? { id: raw.route.id, title: raw.route.title } : undefined,
+      topic: raw.topic ? { id: raw.topic.id, name: raw.topic.name } : undefined,
+      subtopic: raw.subtopic ? { id: raw.subtopic.id, name: raw.subtopic.name } : undefined,
+      subsubtopic: raw.subsubtopic ? { id: raw.subsubtopic.id, name: raw.subsubtopic.name } : undefined,
     } as QuestionWithHierarchy;
   });
 
-  // Apply interleaving if enabled (shuffle questions)
+  // Apply interleaving if enabled (shuffle questions using Fisher-Yates)
   let finalQuestions = parsedQuestions;
   if (request.interleaving_enabled) {
-    finalQuestions = [...parsedQuestions].sort(() => Math.random() - 0.5);
+    finalQuestions = [...parsedQuestions];
+    for (let i = finalQuestions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [finalQuestions[i], finalQuestions[j]] = [finalQuestions[j], finalQuestions[i]];
+    }
   }
 
   // Limit to requested count
@@ -282,7 +300,11 @@ export async function generateFeynmanFeedback(
       continue;
     }
 
-    const question = answer.question as any;
+    const question = answer.question as {
+      question_text: string;
+      options: Array<{ text: string }> | string;
+      correct_answer_index: number;
+    };
     let options = question.options;
     if (typeof options === 'string') {
       try {
@@ -443,7 +465,7 @@ export async function updateAssessmentSessionStatus(
     return { success: false, error: 'No autenticado' };
   }
 
-  const updateData: any = {
+  const updateData: { status: typeof status; completed_at?: string } = {
     status,
   };
 
@@ -468,7 +490,7 @@ export async function updateAssessmentSessionStatus(
 // Get Assessment Results with Answers and Feedback
 export async function getAssessmentResults(
   sessionId: string
-): Promise<{ success: true; data: any } | { success: false; error: string }> {
+): Promise<{ success: true; data: AssessmentResults } | { success: false; error: string }> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -505,18 +527,19 @@ export async function getAssessmentResults(
   }
 
   // Parse questions and calculate stats
-  const parsedAnswers = (answers || []).map((answer: any) => {
-    const question = answer.question;
-    let options = question.options;
-    if (typeof options === 'string') {
+  type RawAnswer = typeof answers extends (infer T)[] | null ? T : never;
+  const parsedAnswers = (answers || []).map((answer: RawAnswer) => {
+    const question = answer.question as QuestionWithHierarchy & { options: QuestionOption[] | string };
+    const rawOptions = question.options;
+    let options: QuestionOption[] = [];
+    if (typeof rawOptions === 'string') {
       try {
-        options = JSON.parse(options);
+        options = JSON.parse(rawOptions);
       } catch {
         options = [];
       }
-    }
-    if (!Array.isArray(options)) {
-      options = [];
+    } else if (Array.isArray(rawOptions)) {
+      options = rawOptions;
     }
 
     return {
@@ -525,11 +548,11 @@ export async function getAssessmentResults(
         ...question,
         options,
       },
-    };
+    } as AssessmentAnswerWithQuestion;
   });
 
   const totalQuestions = parsedAnswers.length;
-  const correctAnswers = parsedAnswers.filter((a: any) => a.is_correct).length;
+  const correctAnswers = parsedAnswers.filter((a) => a.is_correct).length;
   const precision = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
 
   return {

@@ -85,7 +85,7 @@ export async function updateQuestion(
     }
   }
 
-  const updateData: any = {};
+  const updateData: Partial<QuestionFormData & { explanation: string | null; route_id: string | null; topic_id: string | null; subtopic_id: string | null; subsubtopic_id: string | null }> = {};
   if (formData.question_text !== undefined) updateData.question_text = formData.question_text;
   if (formData.options !== undefined) updateData.options = formData.options;
   if (formData.correct_answer_index !== undefined) updateData.correct_answer_index = formData.correct_answer_index;
@@ -293,7 +293,12 @@ Responde SOLO con un JSON válido en este formato exacto:
 IMPORTANTE: El JSON debe comenzar directamente con { y terminar con }. No incluyas markdown, explicaciones ni texto adicional.`;
 
   try {
-    const requestBody: any = {
+    const requestBody: {
+      model: string;
+      messages: Array<{ role: 'system' | 'user'; content: string }>;
+      temperature: number;
+      response_format: { type: string };
+    } = {
       model: 'gpt-4o',
       messages: [
         {

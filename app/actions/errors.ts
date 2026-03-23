@@ -74,7 +74,8 @@ export async function getErrors(
     `)
     .eq('user_id', user.id)
     .eq('is_correct', false) // Only get incorrect answers
-    .order('answered_at', { ascending: false });
+    .order('answered_at', { ascending: false })
+    .limit(500);
 
   // Apply date range filters
   if (filters.startDate) {
