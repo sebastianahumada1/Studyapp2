@@ -1,0 +1,80 @@
+﻿ruta;objetivo_ruta;tema;contenido_intro_tema;subtema;contenido_subtema;sub_subtema;contenido_sub_subtema;tiempo_estimado;dificultad
+Medicina;Estudiar medicina general completa;Neumología;Neumología;Neumología;LDH elevada en exudado pleural;;;52;media
+Medicina;Estudiar medicina general completa;Cardiología;Cardiología/Urgencias;Cardiología/Urgencias;Taquicardia ventricular monomorfa estable;;;52;alta
+Medicina;Estudiar medicina general completa;Pediatría;Pediatría/Cardiología;Pediatría/Cardiología;Taquicardia supraventricular;;;49;baja
+Medicina;Estudiar medicina general completa;Cardiología;Cardiología/Urgencias;Cardiología/Urgencias;Infarto agudo de miocardio con elevación del ST (IAMCEST);;;33;media
+Medicina;Estudiar medicina general completa;Neumología;Neumología;Neumología;EPOC;;;38;alta
+Medicina;Estudiar medicina general completa;Pediatría;Pediatría;Pediatría;Bronquiolitis;;;60;baja
+Medicina;Estudiar medicina general completa;Neumología;Neumología/Infectología;Neumología/Infectología;Neumonía adquirida en la comunidad;;;35;media
+Medicina;Estudiar medicina general completa;Cirugía General;Cirugía General;Cirugía General;Apendicitis aguda;;;41;alta
+Medicina;Estudiar medicina general completa;Neumología;Neumología/Urgencias;Neumología/Urgencias;TEP masivo;;;43;baja
+Medicina;Estudiar medicina general completa;Cirugía General;Cirugía General;Cirugía General;Apendicitis aguda;;;58;media
+Medicina;Estudiar medicina general completa;Cirugía General;Cirugía General;Cirugía General;Obstrucción intestinal;;;49;alta
+Medicina;Estudiar medicina general completa;Cardiología;Cardiología;Cardiología;FA;;;36;baja
+Medicina;Estudiar medicina general completa;Neurología;Neurología/Urgencias;Neurología/Urgencias;ACV isquémico agudo;;;58;media
+Medicina;Estudiar medicina general completa;Medicina Interna;Medicina Interna;Medicina Interna;Reacción adversa medicamentosa;;;48;alta
+Medicina;Estudiar medicina general completa;Neurología;Neurología;Neurología;Neuropraxia del nervio radial;;;41;baja
+Medicina;Estudiar medicina general completa;Neurología;Neurología/Radiología;Neurología/Radiología;Calcificación dural atípica;;;33;media
+Medicina;Estudiar medicina general completa;Neurología;Neurología;Neurología;Migraña sin aura;;;31;alta
+Medicina;Estudiar medicina general completa;Ginecología;Ginecología;Ginecología;Enfermedad inflamatoria pélvica;;;44;baja
+Medicina;Estudiar medicina general completa;Infectología;Infectología/Tropical;Infectología/Tropical;Malaria grave;;;42;media
+Medicina;Estudiar medicina general completa;Ginecología;Ginecología;Ginecología;Células glandulares atípicas;;;41;alta
+Medicina;Estudiar medicina general completa;Cardiología;Cardiología Pediátrica;Cardiología Pediátrica;Comunicación interauricular (CIA);;;53;baja
+Medicina;Estudiar medicina general completa;Neurología;Neurología;Neurología;Crisis focales con automatismos (lóbulo temporal);;;52;media
+Medicina;Estudiar medicina general completa;Pediatría;Pediatría/Cardiología;Pediatría/Cardiología;Detección de cardiopatía congénita (ductus dependiente);;;40;alta
+Medicina;Estudiar medicina general completa;Oftalmología;Oftalmología Pediátrica;Oftalmología Pediátrica;Dacriostenosis congénita;;;53;baja
+Medicina;Estudiar medicina general completa;Oftalmología;Oftalmología Pediátrica;Oftalmología Pediátrica;Retinoblastoma;;;48;media
+Medicina;Estudiar medicina general completa;Neurología;Neurología Pediátrica/Logopedia;Neurología Pediátrica/Logopedia;Dislalia;;;37;alta
+Medicina;Estudiar medicina general completa;Gastroenterología;Gastroenterología/Urgencias;Gastroenterología/Urgencias;Perforación de víscera hueca;;;32;baja
+Medicina;Estudiar medicina general completa;Cardiología;Cardiología/Infectología;Cardiología/Infectología;Endocarditis infecciosa;;;43;media
+Medicina;Estudiar medicina general completa;Ginecología;Ginecología/Obstetricia;Ginecología/Obstetricia;Embarazo ectópico roto;;;41;alta
+Medicina;Estudiar medicina general completa;Psiquiatría;Psiquiatría;Psiquiatría;Episodio mixto en trastorno bipolar;;;45;baja
+Medicina;Estudiar medicina general completa;Cardiología;Cardiología;Cardiología;SCASEST;;;52;media
+Medicina;Estudiar medicina general completa;Cirugía General;Cirugía Vascular/Urgencias;Cirugía Vascular/Urgencias;Trauma vascular;;;43;alta
+Medicina;Estudiar medicina general completa;Pediatría;Ortopedia Pediátrica;Ortopedia Pediátrica;Epifisitis del calcáneo (Enfermedad de Sever);;;58;baja
+Medicina;Estudiar medicina general completa;Neurología;Neurología/Urgencias;Neurología/Urgencias;Convulsión aguda;;;44;media
+Medicina;Estudiar medicina general completa;Gastroenterología;Gastroenterología;Gastroenterología;Úlcera péptica;;;35;alta
+Medicina;Estudiar medicina general completa;Neumología;Neumología/Urgencias;Neumología/Urgencias;Tromboembolismo pulmonar agudo;;;41;baja
+Medicina;Estudiar medicina general completa;Gastroenterología;Gastroenterología/Hepatología;Gastroenterología/Hepatología;Hepatocarcinoma;;;51;media
+Medicina;Estudiar medicina general completa;Nefrología;Nefrología/Urgencias;Nefrología/Urgencias;Hiperpotasemia;;;44;alta
+Medicina;Estudiar medicina general completa;Endocrinología;Endocrinología;Endocrinología;Hipotiroidismo primario;;;35;baja
+Medicina;Estudiar medicina general completa;Ginecología;Ginecología/Obstetricia;Ginecología/Obstetricia;Restricción del crecimiento intrauterino;;;44;media
+Medicina;Estudiar medicina general completa;Gastroenterología;Gastroenterología/Urgencias;Gastroenterología/Urgencias;Pancreatitis aguda;;;31;alta
+Medicina;Estudiar medicina general completa;Cardiología;Cardiología;Cardiología;Fibrilación auricular;;;47;baja
+Medicina;Estudiar medicina general completa;Ginecología;Ginecología;Ginecología;Sangrado irregular por anticoncepción;;;33;media
+Medicina;Estudiar medicina general completa;Endocrinología;Endocrinología/Nefrología;Endocrinología/Nefrología;Diabetes tipo 2;;;56;alta
+Medicina;Estudiar medicina general completa;Ginecología;Ginecología/Obstetricia;Ginecología/Obstetricia;Embarazo sin diabetes gestacional;;;55;baja
+Medicina;Estudiar medicina general completa;Endocrinología;Endocrinología;Endocrinología;Diabetes tipo 2;;;56;media
+Medicina;Estudiar medicina general completa;Endocrinología;Endocrinología/Ginecología;Endocrinología/Ginecología;Diabetes gestacional;;;56;alta
+Medicina;Estudiar medicina general completa;Pediatría;Pediatría;Pediatría;Enfermedad de Kawasaki;;;60;baja
+Medicina;Estudiar medicina general completa;Gastroenterología;Geriatría/Farmacología;Geriatría/Farmacología;Delirium inducido por antihistamínicos;;;46;media
+Medicina;Estudiar medicina general completa;Cirugía General;Cirugía General;Cirugía General;Hernia inguinal incarcerada;;;37;alta
+Medicina;Estudiar medicina general completa;Neurología;Neurocirugía/Urgencias;Neurocirugía/Urgencias;Hernia uncal;;;44;baja
+Medicina;Estudiar medicina general completa;Medicina Interna;Medicina Interna/Urgencias;Medicina Interna/Urgencias;Emergencia hipertensiva;;;46;media
+Medicina;Estudiar medicina general completa;Pediatría;Ortopedia/Radiología;Ortopedia/Radiología;Evaluación de lesiones ocultas en muñeca;;;44;alta
+Medicina;Estudiar medicina general completa;Epidemiología;Epidemiología;Epidemiología;Riesgo relativo;;;58;baja
+Medicina;Estudiar medicina general completa;Neurología;Neurología/Urgencias;Neurología/Urgencias;Hemorragia subaracnoidea;;;50;media
+Medicina;Estudiar medicina general completa;Endocrinología;Endocrinología/Nefrología;Endocrinología/Nefrología;Diabetes en enfermedad renal crónica;;;36;alta
+Medicina;Estudiar medicina general completa;Neumología;Neumología;Neumología;Neumonía adquirida en la comunidad;;;45;baja
+Medicina;Estudiar medicina general completa;Cirugía General;Cirugía General/Urgencias;Cirugía General/Urgencias;Neumotórax a tensión;;;46;media
+Medicina;Estudiar medicina general completa;Cardiología;Cardiología/Urgencias;Cardiología/Urgencias;IAM inferior con elevación del ST;;;40;alta
+Medicina;Estudiar medicina general completa;Cirugía General;Cirugía General;Cirugía General;Hernia inguinal no complicada;;;60;baja
+Medicina;Estudiar medicina general completa;Ginecología;Ginecología/Obstetricia;Ginecología/Obstetricia;Amenaza de aborto;;;52;media
+Medicina;Estudiar medicina general completa;Dermatología;Dermatología/Infectología;Dermatología/Infectología;Dermatitis seborreica;;;51;alta
+Medicina;Estudiar medicina general completa;Ginecología;Hematología/Pediatría;Hematología/Pediatría;Púrpura trombocitopénica inmunitaria (PTI);;;44;baja
+Medicina;Estudiar medicina general completa;Endocrinología;Endocrinología;Endocrinología;Sospecha de malignidad;;;52;media
+Medicina;Estudiar medicina general completa;Cirugía General;Cirugía General/Urgencias;Cirugía General/Urgencias;Trauma abdominal con inestabilidad hemodinámica;;;42;alta
+Medicina;Estudiar medicina general completa;Pediatría;Ortopedia/Urgencias;Ortopedia/Urgencias;Fractura de húmero;;;41;baja
+Medicina;Estudiar medicina general completa;Ginecología;Ginecología/Obstetricia;Ginecología/Obstetricia;Inducción del parto;;;55;media
+Medicina;Estudiar medicina general completa;Psiquiatría;Psiquiatría;Psiquiatría;Esquizofrenia;;;42;alta
+Medicina;Estudiar medicina general completa;Neurología;Neurología;Neurología;Síndrome neurológico inflamatorio;;;39;baja
+Medicina;Estudiar medicina general completa;Pediatría;Pediatría;Pediatría;Eritema infeccioso (Parvovirus B19);;;39;media
+Medicina;Estudiar medicina general completa;Cirugía General;Cirugía General/Urgencias;Cirugía General/Urgencias;Trauma abdominal penetrante;;;42;alta
+Medicina;Estudiar medicina general completa;Nefrología;Nefrología;Nefrología;Anemia en enfermedad renal crónica;;;40;baja
+Medicina;Estudiar medicina general completa;Pediatría;Ortopedia/Urgencias;Ortopedia/Urgencias;Fractura expuesta;;;47;media
+Medicina;Estudiar medicina general completa;Cirugía General;Cirugía Torácica/Urgencias;Cirugía Torácica/Urgencias;Neumotórax a tensión;;;36;alta
+Medicina;Estudiar medicina general completa;Psiquiatría;Psiquiatría;Psiquiatría;Episodio maníaco;;;50;baja
+Medicina;Estudiar medicina general completa;Infectología;Infectología;Infectología;Sospecha de sífilis;;;36;media
+Medicina;Estudiar medicina general completa;Neumología;Neumología/Oncología;Neumología/Oncología;Cáncer de pulmón;;;58;alta
+Medicina;Estudiar medicina general completa;Gastroenterología;Gastroenterología;Gastroenterología;Varices esofágicas con sangrado;;;59;baja
+Medicina;Estudiar medicina general completa;Dermatología;Dermatología;Dermatología;Dermatitis de contacto;;;41;media

@@ -1,1 +1,0 @@
-ALTER TABLE packages ADD COLUMN validity_days int DEFAULT 30;
