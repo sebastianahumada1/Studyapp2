@@ -252,51 +252,64 @@ export async function generateQuestionsWithAI(
     .join(', ');
 
   // Build prompt for OpenAI
-  const prompt = `Eres un experto en educación y creación de preguntas de evaluación. Genera preguntas de opción múltiple en formato JSON.
+  const prompt = `Genera exactamente ${request.questionCount} preguntas de opción múltiple basadas en el siguiente contenido.
 
-Contexto de la jerarquía de estudio:
-${hierarchyContext}
-
-Contenido específico sobre el cual generar preguntas:
+FUENTE PRIMARIA (úsala como base principal):
 ${request.specificContent}
 
-Objetivo de las preguntas:
+CONTEXTO CURRICULAR:
+${hierarchyContext}
+
+OBJETIVO PEDAGÓGICO:
 ${request.questionObjective}
 
-Requisitos:
-- Genera exactamente ${request.questionCount} preguntas
-- Las dificultades deben distribuirse entre: ${difficultiesText}
-- Cada pregunta debe tener entre 2 y 4 opciones de respuesta
-- Solo una opción debe ser correcta (isCorrect: true)
-- Las preguntas deben ser claras, precisas y relevantes al contenido específico
-- Las opciones incorrectas deben ser plausibles pero claramente incorrectas
-- El nivel de dificultad debe corresponder al tipo de pregunta (baja: conocimiento básico, media: comprensión y aplicación, alta: análisis y síntesis)
-- Cada pregunta DEBE incluir una explicación clara y educativa que justifique por qué la respuesta correcta es correcta. La explicación debe ayudar a los estudiantes a comprender el concepto subyacente.
+DISTRIBUCIÓN DE DIFICULTAD REQUERIDA: ${difficultiesText}
+Alineación con Taxonomía de Bloom:
+- baja: Recordar y Comprender (definiciones, identificar, reconocer hechos)
+- media: Aplicar y Analizar (casos clínicos/prácticos, comparar, relacionar causas-efectos)
+- alta: Evaluar y Crear (juicio crítico, diagnóstico diferencial, tomar decisiones ante información incompleta)
 
-Responde SOLO con un JSON válido en este formato exacto:
+REGLAS PARA EL ENUNCIADO (stem):
+- El enunciado debe ser una pregunta completa e independiente, entendible sin ver las opciones.
+- No usar frases como "Todo lo siguiente es correcto EXCEPTO" o dobles negaciones.
+- En preguntas de nivel medio/alto: incluir un escenario o caso antes de la pregunta.
+
+REGLAS PARA LAS OPCIONES (distractores):
+- Exactamente 4 opciones (A, B, C, D). Solo una correcta.
+- Los distractores deben ser plausibles y técnicamente incorrectos (un estudiante que no domina bien puede elegirlos, pero son objetivamente erróneos).
+- Evitar opciones como "Todas las anteriores", "Ninguna de las anteriores" o que sean obviamente absurdas.
+- Los distractores deben representar errores conceptuales reales y comunes, no variaciones triviales.
+
+REGLAS PARA LA EXPLICACIÓN:
+- Explica por qué la opción correcta es correcta (con fundamento en el contenido provisto).
+- Explica brevemente por qué cada distractor es incorrecto (máximo 1 oración por distractor).
+- La explicación debe enseñar, no solo confirmar la respuesta.
+
+Responde SOLO con JSON válido:
 {
   "questions": [
     {
-      "question_text": "Texto de la pregunta",
+      "question_text": "Enunciado completo de la pregunta (puede incluir escenario)",
       "options": [
-        {"text": "Opción 1", "isCorrect": true},
-        {"text": "Opción 2", "isCorrect": false},
-        {"text": "Opción 3", "isCorrect": false},
-        {"text": "Opción 4", "isCorrect": false}
+        {"text": "Opción correcta", "isCorrect": true},
+        {"text": "Distractor plausible 1", "isCorrect": false},
+        {"text": "Distractor plausible 2", "isCorrect": false},
+        {"text": "Distractor plausible 3", "isCorrect": false}
       ],
       "difficulty": "baja",
-      "explanation": "Explicación clara y educativa que justifica por qué la respuesta correcta es correcta, ayudando a los estudiantes a comprender el concepto."
+      "explanation": "La opción A es correcta porque [fundamento]. B es incorrecta porque [razón]. C es incorrecta porque [razón]. D es incorrecta porque [razón]."
     }
   ]
 }
 
-IMPORTANTE: El JSON debe comenzar directamente con { y terminar con }. No incluyas markdown, explicaciones ni texto adicional.`;
+El JSON comienza con { y termina con }. Sin markdown ni texto adicional.`;
 
   try {
     const requestBody: {
       model: string;
       messages: Array<{ role: 'system' | 'user'; content: string }>;
       temperature: number;
+      max_tokens: number;
       response_format: { type: string };
     } = {
       model: 'gpt-4o',
@@ -304,14 +317,15 @@ IMPORTANTE: El JSON debe comenzar directamente con { y terminar con }. No incluy
         {
           role: 'system',
           content:
-            'Eres un asistente experto en educación. Genera preguntas de evaluación de alta calidad. Responde SOLO con JSON válido, sin markdown, sin explicaciones adicionales. El JSON debe comenzar directamente con { y terminar con }.',
+            'Eres un psicometrista y experto en evaluación educativa. Tu especialidad es diseñar preguntas de opción múltiple de alta calidad según principios de medición educativa: enunciados precisos, distractores técnicamente plausibles que representan errores conceptuales reales, y explicaciones que enseñan. Priorizas la validez de constructo y el alineamiento con la Taxonomía de Bloom. Responde SOLO con JSON válido. Sin markdown ni texto adicional.',
         },
         {
           role: 'user',
           content: prompt,
         },
       ],
-      temperature: 0.7,
+      temperature: 0.3,
+      max_tokens: 3000,
       response_format: { type: 'json_object' },
     };
 

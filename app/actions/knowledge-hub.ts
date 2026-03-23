@@ -813,48 +813,65 @@ export async function generateRouteWithAI(request: AIGenerateRequest) {
         .join(', ')
     : 'todos los formatos disponibles';
 
-  const prompt = `Eres un experto en diseño de planes de estudio. Genera una ruta de aprendizaje estructurada en formato JSON.
+  // Derive realistic topic count from weekly hours and level
+  const totalWeeklyMinutes = request.weeklyHours * 60;
+  const levelTopicGuide = {
+    principiante: { topics: '4-6', subtopics: '2-3', subsubtopics: '2-3' },
+    intermedio:   { topics: '5-8', subtopics: '3-4', subsubtopics: '2-4' },
+    avanzado:     { topics: '6-10', subtopics: '3-5', subsubtopics: '3-5' },
+    experto:      { topics: '8-12', subtopics: '4-6', subsubtopics: '3-5' },
+  };
+  const guide = levelTopicGuide[request.level];
 
-Objetivo del estudiante: ${request.objective}
-Temas de interés: ${request.topics.join(', ')}
-Nivel: ${levelMap[request.level]}
-Tiempo disponible semanal: ${request.weeklyHours} horas
-${request.preferredFormats && request.preferredFormats.length > 0 ? `Formatos preferidos: ${formatsText}` : ''}
+  const prompt = `Perfil del estudiante:
+- Objetivo: ${request.objective}
+- Temas de interés: ${request.topics.join(', ')}
+- Nivel: ${levelMap[request.level]}
+- Tiempo disponible: ${request.weeklyHours} h/semana (≈ ${totalWeeklyMinutes} min/semana)
+${request.preferredFormats && request.preferredFormats.length > 0 ? `- Formatos preferidos: ${formatsText}` : ''}
 
-Genera una estructura jerárquica con:
-- Título de la ruta (relevante al objetivo)
-- Descripción breve de la ruta
-- Categoría (ej: Matemáticas, Ciencias, Medicina, etc.)
-- Temas (nivel 1): cada tema debe tener nombre, contenido educativo detallado en HTML, tiempo estimado en minutos (distribuir el tiempo total), dificultad (facil, medio, dificil)
-- Subtemas (nivel 2): cada subtema debe tener nombre, contenido educativo detallado en HTML, tiempo estimado, dificultad
-- 2do Subtemas (nivel 3): cada 2do subtema debe tener nombre, contenido educativo detallado en HTML, tiempo estimado, dificultad
+Diseña una ruta de aprendizaje completa con estas proporciones:
+- ${guide.topics} temas principales (nivel 1)
+- ${guide.subtopics} subtemas por tema (nivel 2)
+- ${guide.subsubtopics} sub-subtemas por subtema (nivel 3)
 
-IMPORTANTE: El campo "content" debe contener contenido educativo detallado y completo en formato HTML (puedes usar párrafos <p>, listas <ul>/<ol>, encabezados <h2>/<h3>, etc.) que explique qué se estudia en ese tema/subtema. No debe estar vacío. Este es el contenido principal que el estudiante verá.
+PRINCIPIOS DE DISEÑO CURRICULAR:
+1. PROGRESIÓN LÓGICA: Los temas deben ir de fundamentos a aplicación. El primer tema siempre debe ser base para los siguientes.
+2. PREREQUISITOS IMPLÍCITOS: Cada tema asume dominio del anterior. El orden importa.
+3. DISTRIBUCIÓN DE TIEMPO: El tiempo total debe sumar aproximadamente ${totalWeeklyMinutes * 4} min (4 semanas de arranque). Temas fundacionales = más tiempo; temas avanzados = menos tiempo pero mayor densidad.
+4. DIFICULTAD PROGRESIVA: La primera mitad de los temas debe ser "facil" o "medio", la segunda mitad "medio" o "dificil".
+5. CONTENIDO ACCIONABLE: El campo "content" de cada nodo debe tener HTML con: (a) qué es y por qué importa, (b) conceptos clave como lista, (c) un ejemplo concreto o caso de aplicación. Mínimo 150 palabras por nodo.
 
-La estructura debe ser completa y educativa. Distribuye el tiempo total de manera realista.
+FORMATO DEL CONTENIDO HTML:
+<h3>¿Qué es y por qué importa?</h3>
+<p>[Explicación directa del concepto y su relevancia práctica]</p>
+<h3>Conceptos clave</h3>
+<ul><li>[concepto 1]: [definición breve]</li><li>[concepto 2]: [definición breve]</li></ul>
+<h3>Ejemplo práctico</h3>
+<p>[Caso real o ejercicio aplicado]</p>
 
-Responde SOLO con un JSON válido en este formato exacto:
+Responde SOLO con JSON válido en este formato:
 {
-  "title": "Título de la ruta",
-  "description": "Descripción de la ruta",
-  "category": "Categoría",
+  "title": "Título específico y descriptivo de la ruta",
+  "description": "Descripción de 2-3 oraciones: qué aprenderá el estudiante y por qué esta ruta lo logrará",
+  "category": "Categoría principal (ej: Medicina, Programación, Derecho, Matemáticas)",
   "topics": [
     {
-      "name": "Nombre del tema",
-      "content": "<p>Contenido educativo detallado en HTML que explique qué se estudia en este tema. Puedes usar párrafos, listas, encabezados, etc.</p>",
+      "name": "Nombre del tema (específico, no genérico)",
+      "content": "<h3>¿Qué es y por qué importa?</h3><p>...</p><h3>Conceptos clave</h3><ul><li>...</li></ul><h3>Ejemplo práctico</h3><p>...</p>",
       "estimated_time_minutes": 120,
-      "difficulty": "medio",
+      "difficulty": "facil",
       "subtopics": [
         {
           "name": "Nombre del subtema",
-          "content": "<p>Contenido educativo detallado en HTML que explique qué se estudia en este subtema.</p>",
-          "estimated_time_minutes": 60,
+          "content": "<h3>¿Qué es y por qué importa?</h3><p>...</p><h3>Conceptos clave</h3><ul><li>...</li></ul><h3>Ejemplo práctico</h3><p>...</p>",
+          "estimated_time_minutes": 45,
           "difficulty": "facil",
           "subsubtopics": [
             {
-              "name": "Nombre del 2do subtema",
-              "content": "<p>Contenido educativo detallado en HTML que explique qué se estudia en este 2do subtema.</p>",
-              "estimated_time_minutes": 30,
+              "name": "Nombre del sub-subtema",
+              "content": "<h3>¿Qué es y por qué importa?</h3><p>...</p><h3>Conceptos clave</h3><ul><li>...</li></ul><h3>Ejemplo práctico</h3><p>...</p>",
+              "estimated_time_minutes": 20,
               "difficulty": "facil"
             }
           ]
@@ -866,20 +883,27 @@ Responde SOLO con un JSON válido en este formato exacto:
 
   try {
     // Try with a model that supports json_object
-    const requestBody: any = {
+    const requestBody: {
+      model: string;
+      messages: Array<{ role: 'system' | 'user'; content: string }>;
+      temperature: number;
+      max_tokens: number;
+      response_format?: { type: string };
+    } = {
       model: 'gpt-4o',
       messages: [
         {
           role: 'system',
           content:
-            'Eres un asistente experto en educación. Genera planes de estudio estructurados y educativos. Responde SOLO con JSON válido, sin markdown, sin explicaciones adicionales. El JSON debe comenzar directamente con { y terminar con }.',
+            'Eres un diseñador curricular experto con experiencia en pedagogía, aprendizaje activo y diseño instruccional. Tu especialidad es crear rutas de aprendizaje progresivas, bien estructuradas y accionables. Priorizas la progresión lógica (fundamentos → aplicación), la coherencia entre niveles de dificultad y el contenido accionable. Responde SOLO con JSON válido. Sin markdown, sin texto adicional. El JSON comienza con { y termina con }.',
         },
         {
           role: 'user',
           content: prompt,
         },
       ],
-      temperature: 0.7,
+      temperature: 0.5,
+      max_tokens: 4000,
     };
 
     // Only add response_format for models that support it
